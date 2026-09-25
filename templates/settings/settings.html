@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Settings - HRMS</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/settings.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="sidebar {% if settings.compact_sidebar %}collapsed{% endif %}" id="sidebar">
+
+    <div class="sidebar-logo">
+
+        <div class="logo-icon">
+            <i class="bi bi-people-fill"></i>
+        </div>
+
+        <div>
+            <h4>HRMS</h4>
+            <span>Human Resources</span>
+        </div>
+
+    </div>
+
+    <div class="sidebar-menu">
+
+        <div class="menu-title">
+            MAIN MENU
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="menu-item">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{{ url_for('employee_list') }}" class="menu-item">
+            <i class="bi bi-people"></i>
+            <span>Employees</span>
+        </a>
+
+        <a href="{{ url_for('leave_list') }}" class="menu-item">
+            <i class="bi bi-calendar-check"></i>
+            <span>Leave Management</span>
+        </a>
+
+        <a href="{{ url_for('payroll') }}" class="menu-item">
+            <i class="bi bi-wallet2"></i>
+            <span>Payroll</span>
+        </a>
+
+        <a href="{{ url_for('reports') }}" class="menu-item">
+            <i class="bi bi-bar-chart"></i>
+            <span>Reports</span>
+        </a>
+
+        <div class="menu-title">
+            SYSTEM
+        </div>
+
+        <a href="{{ url_for('profile') }}" class="menu-item">
+            <i class="bi bi-person-circle"></i>
+            <span>My Profile</span>
+        </a>
+
+        <a href="{{ url_for('settings') }}" class="menu-item active">
+            <i class="bi bi-gear"></i>
+            <span>Settings</span>
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="menu-item logout">
+            <i class="bi bi-box-arrow-left"></i>
+            <span>Logout</span>
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="main-content">
+
+    <nav class="topbar">
+
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+
+        <div class="page-title">
+
+            <h3>
+                Settings
+            </h3>
+
+            <p>
+                Manage your HRMS system preferences
+            </p>
+
+        </div>
+
+        <div class="topbar-right">
+
+            <button
+                class="notification-btn"
+                type="button"
+            >
+                <i class="bi bi-bell"></i>
+                <span>3</span>
+            </button>
+
+            <div class="user-info">
+
+                <div class="user-avatar">
+                    H
+                </div>
+
+                <div>
+
+                    <strong>
+                        HR Administrator
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <div class="settings-container">
+
+        <div class="page-header">
+
+            <div>
+
+                <h2>
+                    Settings
+                </h2>
+
+                <p>
+                    Configure your account and system preferences
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div
+                        class="alert alert-{{ category }} alert-dismissible fade show"
+                        role="alert"
+                    >
+
+                        <i
+                            class="bi
+                            {% if category == 'success' %}
+                                bi-check-circle
+                            {% else %}
+                                bi-exclamation-circle
+                            {% endif %}"
+                        ></i>
+
+                        {{ message }}
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                        ></button>
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <form
+            method="POST"
+            action="{{ url_for('settings') }}"
+        >
+
+            <div class="row g-4">
+
+
+                <!-- LEFT COLUMN -->
+
+                <div class="col-lg-8">
+
+
+                    <!-- GENERAL SETTINGS -->
+
+                    <div class="settings-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+
+                                <h5>
+                                    General Settings
+                                </h5>
+
+                                <p>
+                                    Configure basic system preferences
+                                </p>
+
+                            </div>
+
+                            <i class="bi bi-sliders"></i>
+
+                        </div>
+
+
+                        <div class="settings-body">
+
+                            <div class="row g-4">
+
+
+                                <div class="col-md-6">
+
+                                    <label
+                                        for="company_name"
+                                        class="form-label"
+                                    >
+                                        Company Name
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+                                            <i class="bi bi-building"></i>
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="company_name"
+                                            name="company_name"
+                                            value="{{ settings.company_name }}"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label
+                                        for="timezone"
+                                        class="form-label"
+                                    >
+                                        Timezone
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+                                            <i class="bi bi-globe"></i>
+                                        </span>
+
+                                        <select
+                                            class="form-select"
+                                            id="timezone"
+                                            name="timezone"
+                                        >
+
+                                            <option
+                                                value="Africa/Douala"
+                                                {% if settings.timezone == "Africa/Douala" %}selected{% endif %}
+                                            >
+                                                Africa/Douala
+                                            </option>
+
+                                            <option
+                                                value="Africa/Lagos"
+                                                {% if settings.timezone == "Africa/Lagos" %}selected{% endif %}
+                                            >
+                                                Africa/Lagos
+                                            </option>
+
+                                            <option
+                                                value="Africa/Accra"
+                                                {% if settings.timezone == "Africa/Accra" %}selected{% endif %}
+                                            >
+                                                Africa/Accra
+                                            </option>
+
+                                            <option
+                                                value="Europe/London"
+                                                {% if settings.timezone == "Europe/London" %}selected{% endif %}
+                                            >
+                                                Europe/London
+                                            </option>
+
+                                            <option
+                                                value="UTC"
+                                                {% if settings.timezone == "UTC" %}selected{% endif %}
+                                            >
+                                                UTC
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label
+                                        for="currency"
+                                        class="form-label"
+                                    >
+                                        Currency
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+                                            <i class="bi bi-cash-stack"></i>
+                                        </span>
+
+                                        <select
+                                            class="form-select"
+                                            id="currency"
+                                            name="currency"
+                                        >
+
+                                            <option
+                                                value="FCFA"
+                                                {% if settings.currency == "FCFA" %}selected{% endif %}
+                                            >
+                                                FCFA
+                                            </option>
+
+                                            <option
+                                                value="USD"
+                                                {% if settings.currency == "USD" %}selected{% endif %}
+                                            >
+                                                USD
+                                            </option>
+
+                                            <option
+                                                value="EUR"
+                                                {% if settings.currency == "EUR" %}selected{% endif %}
+                                            >
+                                                EUR
+                                            </option>
+
+                                            <option
+                                                value="GBP"
+                                                {% if settings.currency == "GBP" %}selected{% endif %}
+                                            >
+                                                GBP
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label
+                                        for="date_format"
+                                        class="form-label"
+                                    >
+                                        Date Format
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+                                            <i class="bi bi-calendar3"></i>
+                                        </span>
+
+                                        <select
+                                            class="form-select"
+                                            id="date_format"
+                                            name="date_format"
+                                        >
+
+                                            <option
+                                                value="YYYY-MM-DD"
+                                                {% if settings.date_format == "YYYY-MM-DD" %}selected{% endif %}
+                                            >
+                                                YYYY-MM-DD
+                                            </option>
+
+                                            <option
+                                                value="DD-MM-YYYY"
+                                                {% if settings.date_format == "DD-MM-YYYY" %}selected{% endif %}
+                                            >
+                                                DD-MM-YYYY
+                                            </option>
+
+                                            <option
+                                                value="MM-DD-YYYY"
+                                                {% if settings.date_format == "MM-DD-YYYY" %}selected{% endif %}
+                                            >
+                                                MM-DD-YYYY
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NOTIFICATIONS -->
+
+                    <div class="settings-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+
+                                <h5>
+                                    Notifications
+                                </h5>
+
+                                <p>
+                                    Choose which notifications you receive
+                                </p>
+
+                            </div>
+
+                            <i class="bi bi-bell"></i>
+
+                        </div>
+
+
+                        <div class="settings-body">
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-icon">
+                                        <i class="bi bi-envelope"></i>
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Email Notifications
+                                        </strong>
+
+                                        <span>
+                                            Receive important updates by email
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-check form-switch">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="email_notifications"
+                                        name="email_notifications"
+                                        {% if settings.email_notifications %}checked{% endif %}
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-icon">
+                                        <i class="bi bi-calendar-event"></i>
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Leave Notifications
+                                        </strong>
+
+                                        <span>
+                                            Get notified about leave requests
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-check form-switch">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="leave_notifications"
+                                        name="leave_notifications"
+                                        {% if settings.leave_notifications %}checked{% endif %}
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-icon">
+                                        <i class="bi bi-wallet2"></i>
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Payroll Notifications
+                                        </strong>
+
+                                        <span>
+                                            Get notified about payroll activity
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-check form-switch">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="payroll_notifications"
+                                        name="payroll_notifications"
+                                        {% if settings.payroll_notifications %}checked{% endif %}
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SECURITY -->
+
+                    <div class="settings-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+
+                                <h5>
+                                    Security
+                                </h5>
+
+                                <p>
+                                    Manage account security preferences
+                                </p>
+
+                            </div>
+
+                            <i class="bi bi-shield-lock"></i>
+
+                        </div>
+
+
+                        <div class="settings-body">
+
+
+                            <div class="setting-row">
+
+                                <div class="setting-info">
+
+                                    <div class="setting-icon security">
+                                        <i class="bi bi-shield-check"></i>
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Two-Factor Authentication
+                                        </strong>
+
+                                        <span>
+                                            Add an extra layer of account security
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-check form-switch">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="two_factor"
+                                        name="two_factor"
+                                        {% if settings.two_factor %}checked{% endif %}
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="security-password">
+
+                                <div>
+
+                                    <strong>
+                                        Password
+                                    </strong>
+
+                                    <span>
+                                        Change your account password
+                                    </span>
+
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-primary"
+                                    id="changePasswordBtn"
+                                >
+
+                                    <i class="bi bi-key"></i>
+
+                                    Change Password
+
+                                </button>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- RIGHT COLUMN -->
+
+                <div class="col-lg-4">
+
+
+                    <!-- PREFERENCES -->
+
+                    <div class="settings-card preferences-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+
+                                <h5>
+                                    Preferences
+                                </h5>
+
+                                <p>
+                                    Customize your experience
+                                </p>
+
+                            </div>
+
+                            <i class="bi bi-palette"></i>
+
+                        </div>
+
+
+                        <div class="settings-body">
+
+
+                            <div class="preference-item">
+
+                                <div class="preference-icon">
+                                    <i class="bi bi-moon"></i>
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Dark Mode
+                                    </strong>
+
+                                    <span>
+                                        Use dark interface
+                                    </span>
+
+                                </div>
+
+                                <div class="form-check form-switch">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="dark_mode"
+                                        name="dark_mode"
+                                        {% if settings.dark_mode %}checked{% endif %}
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="preference-item">
+
+                                <div class="preference-icon">
+                                    <i class="bi bi-layout-sidebar"></i>
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Compact Sidebar
+                                    </strong>
+
+                                    <span>
+                                        Reduce sidebar width
+                                    </span>
+
+                                </div>
+
+                                <div class="form-check form-switch">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="compact_sidebar"
+                                        name="compact_sidebar"
+                                        {% if settings.compact_sidebar %}checked{% endif %}
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SYSTEM INFORMATION -->
+
+                    <div class="settings-card system-card">
+
+                        <div class="card-header-custom">
+
+                            <div>
+
+                                <h5>
+                                    System Information
+                                </h5>
+
+                                <p>
+                                    Current HRMS information
+                                </p>
+
+                            </div>
+
+                            <i class="bi bi-info-circle"></i>
+
+                        </div>
+
+
+                        <div class="system-list">
+
+                            <div class="system-item">
+
+                                <span>
+                                    Application
+                                </span>
+
+                                <strong>
+                                    HRMS
+                                </strong>
+
+                            </div>
+
+                            <div class="system-item">
+
+                                <span>
+                                    Version
+                                </span>
+
+                                <strong>
+                                    1.0.0
+                                </strong>
+
+                            </div>
+
+                            <div class="system-item">
+
+                                <span>
+                                    Environment
+                                </span>
+
+                                <strong>
+                                    Development
+                                </strong>
+
+                            </div>
+
+                            <div class="system-item">
+
+                                <span>
+                                    Status
+                                </span>
+
+                                <strong class="text-success">
+                                    <span class="status-dot"></span>
+                                    Online
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- QUICK TIP -->
+
+                    <div class="settings-tip">
+
+                        <div class="tip-icon">
+                            <i class="bi bi-lightbulb"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Quick Tip
+                            </strong>
+
+                            <p>
+                                Keep your account and notification settings
+                                up to date for a smoother HRMS experience.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    id="resetSettingsBtn"
+                >
+                    Reset
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+
+                    <i class="bi bi-check2-circle"></i>
+
+                    Save Settings
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <div class="settings-footer">
+
+            <span>
+                <i class="bi bi-shield-check"></i>
+                HRMS system settings are protected.
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CHANGE PASSWORD MODAL -->
+
+<div
+    class="modal fade"
+    id="changePasswordModal"
+    tabindex="-1"
+    aria-labelledby="changePasswordModalLabel"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5
+                    class="modal-title"
+                    id="changePasswordModalLabel"
+                >
+                    Change Password
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('change_password') }}"
+            >
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+
+                        <label
+                            for="current_password"
+                            class="form-label"
+                        >
+                            Current Password
+                        </label>
+
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="current_password"
+                            name="current_password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label
+                            for="new_password"
+                            class="form-label"
+                        >
+                            New Password
+                        </label>
+
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="new_password"
+                            name="new_password"
+                            minlength="6"
+                            required
+                        >
+
+                        <small class="text-muted">
+                            Minimum 6 characters.
+                        </small>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label
+                            for="confirm_password"
+                            class="form-label"
+                        >
+                            Confirm New Password
+                        </label>
+
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="confirm_password"
+                            name="confirm_password"
+                            minlength="6"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        <i class="bi bi-check2-circle"></i>
+                        Change Password
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+
+<script>
+
+    /* =====================================================
+       SIDEBAR
+    ===================================================== */
+
+    const sidebarToggle =
+        document.getElementById("sidebarToggle");
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    if (sidebarToggle && sidebar) {
+
+        sidebarToggle.addEventListener(
+            "click",
+            function () {
+
+                sidebar.classList.toggle("collapsed");
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       CHANGE PASSWORD
+    ===================================================== */
+
+    const changePasswordBtn =
+        document.getElementById("changePasswordBtn");
+
+    const changePasswordModalElement =
+        document.getElementById("changePasswordModal");
+
+    if (
+        changePasswordBtn &&
+        changePasswordModalElement
+    ) {
+
+        const changePasswordModal =
+            new bootstrap.Modal(
+                changePasswordModalElement
+            );
+
+        changePasswordBtn.addEventListener(
+            "click",
+            function () {
+
+                changePasswordModal.show();
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       RESET SETTINGS
+    ===================================================== */
+
+    const resetSettingsBtn =
+        document.getElementById("resetSettingsBtn");
+
+    if (resetSettingsBtn) {
+
+        resetSettingsBtn.addEventListener(
+            "click",
+            function () {
+
+                const confirmed =
+                    confirm(
+                        "Are you sure you want to reset all settings to their default values?"
+                    );
+
+                if (!confirmed) {
+                    return;
+                }
+
+                const form =
+                    document.querySelector(
+                        'form[action="{{ url_for("settings") }}"]'
+                    );
+
+                if (!form) {
+                    return;
+                }
+
+                const resetForm =
+                    document.createElement("form");
+
+                resetForm.method = "POST";
+                resetForm.action =
+                    "{{ url_for('reset_settings') }}";
+
+                document.body.appendChild(resetForm);
+
+                resetForm.submit();
+
+            }
+        );
+
+    }
+
+</script>
+
+
+<!-- Existing HRMS settings JavaScript -->
+
+<script
+    src="{{ url_for('static', filename='js/settings.js') }}"
+></script>
+
+</body>
+
+</html>

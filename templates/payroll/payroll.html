@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payroll Management - HRMS</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/payroll.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="hrms-layout">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+
+            <div class="brand-text">
+                <h5>HRMS</h5>
+                <span>Human Resource Management</span>
+            </div>
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('employee_list') }}" class="nav-item">
+                <i class="bi bi-people-fill"></i>
+                <span>Employees</span>
+            </a>
+
+            <a href="{{ url_for('leave_list') }}" class="nav-item">
+                <i class="bi bi-calendar3"></i>
+                <span>Leave Management</span>
+            </a>
+
+            <a href="{{ url_for('payroll') }}" class="nav-item active">
+                <i class="bi bi-wallet2"></i>
+                <span>Payroll</span>
+            </a>
+
+            <a href="{{ url_for('reports') }}" class="nav-item">
+                <i class="bi bi-bar-chart-fill"></i>
+                <span>Reports</span>
+            </a>
+
+            <a href="{{ url_for('profile') }}" class="nav-item">
+                <i class="bi bi-person-circle"></i>
+                <span>Profile</span>
+            </a>
+
+            <a href="{{ url_for('settings') }}" class="nav-item">
+                <i class="bi bi-gear-fill"></i>
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="{{ url_for('logout') }}" class="nav-item logout">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    type="button"
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                >
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <div class="page-title">
+
+                    <h4>Payroll Management</h4>
+
+                    <p>
+                        Manage employee salaries and payroll records
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <button class="notification-btn" type="button">
+                    <i class="bi bi-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+
+                <div class="admin-profile">
+
+                    <div class="admin-avatar">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+
+                    <div class="admin-info">
+                        <strong>HR Administrator</strong>
+                        <span>Administrator</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE -->
+
+        <div class="dashboard-container">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="payroll-page-header">
+
+                <div>
+
+                    <div class="breadcrumb-text">
+                        Payroll
+                    </div>
+
+                    <h4>Payroll Management</h4>
+
+                    <p>
+                        View and manage employee payroll records
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('add_payroll') }}"
+                    class="btn btn-primary payroll-add-btn"
+                >
+                    <i class="bi bi-plus-lg"></i>
+                    Generate Payroll
+                </a>
+
+            </div>
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    {% for category, message in messages %}
+
+                        <div
+                            class="alert alert-{{ category }} alert-dismissible fade show"
+                            role="alert"
+                        >
+                            {{ message }}
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                            ></button>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <!-- =================================================
+                 STAT CARDS
+            ================================================== -->
+
+            <div class="row g-3 payroll-stats">
+
+                <div class="col-xl-4 col-md-6">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon blue">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>Total Payroll</span>
+
+                            <h3>
+                                {{ "{:,.0f}".format(total_payroll) }}
+                                <small>FCFA</small>
+                            </h3>
+
+                            <p>
+                                All payroll records
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-4 col-md-6">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon green">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>Paid Payroll</span>
+
+                            <h3>
+                                {{ "{:,.0f}".format(paid_payroll) }}
+                                <small>FCFA</small>
+                            </h3>
+
+                            <p>
+                                Completed payments
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xl-4 col-md-6">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon orange">
+                            <i class="bi bi-clock-fill"></i>
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>Pending Payroll</span>
+
+                            <h3>
+                                {{ "{:,.0f}".format(pending_payroll) }}
+                                <small>FCFA</small>
+                            </h3>
+
+                            <p>
+                                Awaiting payment
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PAYROLL DIRECTORY
+            ================================================== -->
+
+            <div class="payroll-directory">
+
+                <div class="card-header-custom">
+
+                    <div>
+
+                        <h5>Payroll Records</h5>
+
+                        <p>
+                            Employee salary and payment records
+                        </p>
+
+                    </div>
+
+
+                    <div class="payroll-search">
+
+                        <i class="bi bi-search"></i>
+
+                        <input
+                            type="text"
+                            id="payrollSearch"
+                            placeholder="Search payroll..."
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table payroll-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Employee</th>
+
+                                <th>Pay Period</th>
+
+                                <th>Basic Salary</th>
+
+                                <th>Allowances</th>
+
+                                <th>Deductions</th>
+
+                                <th>Net Salary</th>
+
+                                <th>Status</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="payrollTableBody">
+
+                            {% if payroll_records %}
+
+                                {% for record in payroll_records %}
+
+                                    <tr>
+
+                                        <td>
+
+                                            <div class="employee-cell">
+
+                                                <div class="employee-avatar">
+                                                    {{ record.employee[:1] | upper }}
+                                                </div>
+
+                                                <div>
+
+                                                    <strong>
+                                                        {{ record.employee }}
+                                                    </strong>
+
+                                                    <span>
+                                                        {{ record.position }}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <td>
+                                            <span class="period-text">
+                                                {{ record.pay_period }}
+                                            </span>
+                                        </td>
+
+
+                                        <td>
+                                            {{ "{:,.0f}".format(record.basic_salary) }}
+                                            FCFA
+                                        </td>
+
+
+                                        <td class="amount-positive">
+                                            +{{ "{:,.0f}".format(record.allowances) }}
+                                        </td>
+
+
+                                        <td class="amount-negative">
+                                            -{{ "{:,.0f}".format(record.deductions) }}
+                                        </td>
+
+
+                                        <td>
+
+                                            <strong class="net-salary">
+                                                {{ "{:,.0f}".format(record.net_salary) }}
+                                                FCFA
+                                            </strong>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            {% if record.status == "Paid" %}
+
+                                                <span class="status-badge paid">
+                                                    <i class="bi bi-check-circle-fill"></i>
+                                                    Paid
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="status-badge pending">
+                                                    <i class="bi bi-clock-fill"></i>
+                                                    Pending
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <div class="action-buttons">
+
+                                                <a
+                                                    href="{{ url_for('payroll_detail', payroll_id=record.id) }}"
+                                                    class="action-button view"
+                                                    title="View"
+                                                >
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+
+
+                                                {% if record.status != "Paid" %}
+
+                                                    <form
+                                                        method="POST"
+                                                        action="{{ url_for('mark_payroll_paid', payroll_id=record.id) }}"
+                                                        class="inline-form"
+                                                    >
+
+                                                        <button
+                                                            type="submit"
+                                                            class="action-button pay"
+                                                            title="Mark as Paid"
+                                                        >
+                                                            <i class="bi bi-check-lg"></i>
+                                                        </button>
+
+                                                    </form>
+
+                                                {% endif %}
+
+
+                                                <form
+                                                    method="POST"
+                                                    action="{{ url_for('delete_payroll', payroll_id=record.id) }}"
+                                                    class="inline-form delete-form"
+                                                    onsubmit="return confirm('Delete this payroll record?');"
+                                                >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="action-button delete"
+                                                        title="Delete"
+                                                    >
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                <tr id="emptyPayrollRow">
+
+                                    <td colspan="8">
+
+                                        <div class="empty-state">
+
+                                            <div class="empty-icon">
+                                                <i class="bi bi-wallet2"></i>
+                                            </div>
+
+                                            <h5>No Payroll Records</h5>
+
+                                            <p>
+                                                No payroll has been generated yet.
+                                            </p>
+
+                                            <a
+                                                href="{{ url_for('add_payroll') }}"
+                                                class="btn btn-primary"
+                                            >
+                                                <i class="bi bi-plus-lg"></i>
+                                                Generate Payroll
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endif %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+<script
+    src="{{ url_for('static', filename='js/payroll.js') }}"
+></script>
+<!-- Add this script to EVERY HRMS page, immediately before </body> -->
+
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</body>
+</html>

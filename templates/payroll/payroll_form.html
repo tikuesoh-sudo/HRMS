@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Payroll - HRMS</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/payroll.css') }}"
+    >
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/employees.css') }}"
+    >
+</head>
+
+<body>
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <div>
+                <h5>HRMS</h5>
+                <span>Human Resources</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('employee_list') }}" class="nav-item">
+                <i class="bi bi-people"></i>
+                <span>Employees</span>
+            </a>
+
+            <a href="{{ url_for('leave_list') }}" class="nav-item">
+                <i class="bi bi-calendar2-check"></i>
+                <span>Leave Management</span>
+            </a>
+
+            <a href="{{ url_for('payroll') }}" class="nav-item active">
+                <i class="bi bi-wallet2"></i>
+                <span>Payroll</span>
+            </a>
+
+            <div class="nav-section">
+                <span>MANAGEMENT</span>
+            </div>
+
+            <a href="#" class="nav-item">
+                <i class="bi bi-bar-chart"></i>
+                <span>Reports</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <i class="bi bi-person-circle"></i>
+                <span>Profile</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <i class="bi bi-gear"></i>
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="{{ url_for('logout') }}" class="nav-item logout-item">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    type="button"
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                >
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <div>
+                    <h6>Payroll Management</h6>
+                    <span>Generate employee payroll</span>
+                </div>
+
+            </div>
+
+            <div class="topbar-right">
+
+                <button type="button" class="notification-btn">
+                    <i class="bi bi-bell"></i>
+                    <span>3</span>
+                </button>
+
+                <div class="user-profile">
+                    <div class="user-avatar">HR</div>
+                    <div class="user-info">
+                        <strong>HR Administrator</strong>
+                        <span>Administrator</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="dashboard-container">
+
+            <div class="employee-page-header">
+
+                <div>
+                    <div class="breadcrumb-text">
+                        Payroll / Generate Payroll
+                    </div>
+
+                    <h2>Generate Payroll</h2>
+
+                    <p>
+                        Create a payroll record for an employee.
+                    </p>
+                </div>
+
+                <a
+                    href="{{ url_for('payroll') }}"
+                    class="btn btn-light"
+                >
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Back to Payroll
+                </a>
+
+            </div>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            <i class="bi bi-info-circle me-2"></i>
+                            {{ message }}
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                            ></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+
+            <div class="payroll-directory">
+
+                <div class="card-header-custom">
+
+                    <div>
+                        <h5>
+                            <i class="bi bi-file-earmark-plus me-2"></i>
+                            Payroll Information
+                        </h5>
+
+                        <p>
+                            Enter the details below to generate payroll.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('add_payroll') }}"
+                    id="payrollForm"
+                >
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <label for="employee_id" class="form-label">
+                                Employee
+                            </label>
+
+                            <select
+                                name="employee_id"
+                                id="employee_id"
+                                class="form-select"
+                                required
+                            >
+                                <option value="" selected disabled>
+                                    Select employee
+                                </option>
+
+                                {% for employee in employees %}
+                                    <option
+                                        value="{{ employee.id }}"
+                                        data-salary="{{ employee.salary }}"
+                                    >
+                                        {{ employee.name }} — {{ employee.position }}
+                                    </option>
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label for="pay_period" class="form-label">
+                                Pay Period
+                            </label>
+
+                            <input
+                                type="month"
+                                name="pay_period"
+                                id="pay_period"
+                                class="form-control"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label for="basic_salary" class="form-label">
+                                Basic Salary
+                            </label>
+
+                            <div class="input-group">
+                                <span class="input-group-text">FCFA</span>
+
+                                <input
+                                    type="text"
+                                    id="basic_salary"
+                                    class="form-control"
+                                    placeholder="0"
+                                    readonly
+                                >
+                            </div>
+
+                            <small class="text-muted">
+                                Automatically loaded from employee record.
+                            </small>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label for="allowances" class="form-label">
+                                Allowances
+                            </label>
+
+                            <div class="input-group">
+                                <span class="input-group-text">FCFA</span>
+
+                                <input
+                                    type="number"
+                                    name="allowances"
+                                    id="allowances"
+                                    class="form-control"
+                                    min="0"
+                                    step="0.01"
+                                    value="0"
+                                    placeholder="0"
+                                >
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label for="deductions" class="form-label">
+                                Deductions
+                            </label>
+
+                            <div class="input-group">
+                                <span class="input-group-text">FCFA</span>
+
+                                <input
+                                    type="number"
+                                    name="deductions"
+                                    id="deductions"
+                                    class="form-control"
+                                    min="0"
+                                    step="0.01"
+                                    value="0"
+                                    placeholder="0"
+                                >
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label for="net_salary" class="form-label">
+                                Estimated Net Salary
+                            </label>
+
+                            <div class="input-group">
+                                <span class="input-group-text">FCFA</span>
+
+                                <input
+                                    type="text"
+                                    id="net_salary"
+                                    class="form-control"
+                                    placeholder="0"
+                                    readonly
+                                >
+                            </div>
+
+                            <small class="text-muted">
+                                Basic salary + allowances − deductions.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <a
+                            href="{{ url_for('payroll') }}"
+                            class="btn btn-light"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            <i class="bi bi-check-circle me-1"></i>
+                            Generate Payroll
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const sidebar = document.getElementById("sidebar");
+            const sidebarToggle = document.getElementById("sidebarToggle");
+
+            const employeeSelect = document.getElementById("employee_id");
+            const basicSalary = document.getElementById("basic_salary");
+            const allowances = document.getElementById("allowances");
+            const deductions = document.getElementById("deductions");
+            const netSalary = document.getElementById("net_salary");
+
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener("click", function () {
+                    sidebar.classList.toggle("show");
+                });
+            }
+
+            function calculateNetSalary() {
+
+                const selectedOption =
+                    employeeSelect.options[employeeSelect.selectedIndex];
+
+                const salary =
+                    parseFloat(selectedOption?.dataset.salary || 0);
+
+                const allowance =
+                    parseFloat(allowances.value || 0);
+
+                const deduction =
+                    parseFloat(deductions.value || 0);
+
+                const net =
+                    salary + allowance - deduction;
+
+                basicSalary.value =
+                    salary.toLocaleString("en-US");
+
+                netSalary.value =
+                    Math.max(net, 0).toLocaleString("en-US");
+            }
+
+            employeeSelect.addEventListener(
+                "change",
+                calculateNetSalary
+            );
+
+            allowances.addEventListener(
+                "input",
+                calculateNetSalary
+            );
+
+            deductions.addEventListener(
+                "input",
+                calculateNetSalary
+            );
+
+            document.addEventListener("click", function (event) {
+
+                if (!sidebar || !sidebarToggle) {
+                    return;
+                }
+
+                if (window.innerWidth > 992) {
+                    return;
+                }
+
+                if (
+                    sidebar.classList.contains("show") &&
+                    !sidebar.contains(event.target) &&
+                    !sidebarToggle.contains(event.target)
+                ) {
+                    sidebar.classList.remove("show");
+                }
+
+            });
+
+        });
+    </script>
+<!-- Add this script to EVERY HRMS page, immediately before </body> -->
+
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</body>
+</html>

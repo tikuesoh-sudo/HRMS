@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Edit Employee - HRMS</title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Bootstrap Icons -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <!-- Employees CSS -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/employees.css') }}"
+    >
+
+
+    <!-- =====================================================
+         EDIT EMPLOYEE PAGE STYLES
+         Uses the existing HRMS Employees design
+    ====================================================== -->
+
+    <style>
+
+        /* =========================================
+           EDIT EMPLOYEE HEADER
+        ========================================= */
+
+        .edit-page-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 25px;
+        }
+
+
+        .edit-page-header h2 {
+            color: var(--text);
+
+            font-size: 21px;
+
+            font-weight: 700;
+
+            margin: 0 0 5px;
+        }
+
+
+        .edit-page-header p {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin: 0;
+        }
+
+
+        /* =========================================
+           BACK BUTTON
+        ========================================= */
+
+        .back-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 10px 16px;
+
+            border-radius: 9px;
+
+            background: var(--white);
+
+            border: 1px solid var(--border);
+
+            color: var(--text);
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            transition: all 0.25s ease;
+        }
+
+
+        .back-button:hover {
+            color: var(--primary);
+
+            background: #eff6ff;
+
+            border-color: #bfdbfe;
+
+            transform: translateX(-2px);
+        }
+
+
+        /* =========================================
+           EDIT CARD
+        ========================================= */
+
+        .edit-employee-card {
+            background: var(--white);
+
+            border: 1px solid #edf0f5;
+
+            border-radius: 16px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 5px 18px rgba(15, 23, 42, 0.045);
+
+            animation: editCardAppear 0.5s ease;
+        }
+
+
+        @keyframes editCardAppear {
+
+            from {
+                opacity: 0;
+
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform: translateY(0);
+            }
+
+        }
+
+
+        /* =========================================
+           CARD HEADER
+        ========================================= */
+
+        .edit-card-header {
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            padding-bottom: 20px;
+
+            margin-bottom: 22px;
+
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+
+        .edit-card-icon {
+            width: 48px;
+
+            height: 48px;
+
+            min-width: 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #dbeafe,
+                    #e0e7ff
+                );
+
+            color: #3730a3;
+
+            font-size: 19px;
+        }
+
+
+        .edit-card-header h5 {
+            color: var(--text);
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            margin: 0 0 4px;
+        }
+
+
+        .edit-card-header p {
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin: 0;
+        }
+
+
+        /* =========================================
+           FORM
+        ========================================= */
+
+        .edit-form-label {
+            display: block;
+
+            color: #475569;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            margin-bottom: 7px;
+        }
+
+
+        .edit-form-label .required {
+            color: var(--danger);
+        }
+
+
+        .edit-form-control,
+        .edit-form-select {
+
+            width: 100%;
+
+            min-height: 43px;
+
+            padding: 10px 12px;
+
+            background: #f8fafc;
+
+            border: 1px solid var(--border);
+
+            border-radius: 9px;
+
+            color: var(--text);
+
+            font-size: 12px;
+
+            outline: none;
+
+            transition: all 0.25s ease;
+        }
+
+
+        .edit-form-control:focus,
+        .edit-form-select:focus {
+
+            background: var(--white);
+
+            border-color: #93c5fd;
+
+            box-shadow:
+                0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+
+        .edit-form-control::placeholder {
+            color: #94a3b8;
+        }
+
+
+        .edit-form-help {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 5px;
+        }
+
+
+        /* =========================================
+           FORM SECTION
+        ========================================= */
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+
+        .form-section:last-of-type {
+            margin-bottom: 10px;
+        }
+
+
+        .form-section-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: var(--text);
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 16px;
+        }
+
+
+        .form-section-title i {
+            color: var(--primary);
+
+            font-size: 15px;
+        }
+
+
+        /* =========================================
+           BUTTONS
+        ========================================= */
+
+        .form-actions {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            padding-top: 20px;
+
+            margin-top: 20px;
+
+            border-top: 1px solid #f1f5f9;
+        }
+
+
+        .cancel-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            min-height: 42px;
+
+            padding: 10px 17px;
+
+            border-radius: 9px;
+
+            background: #f8fafc;
+
+            border: 1px solid var(--border);
+
+            color: #475569;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            transition: all 0.25s ease;
+        }
+
+
+        .cancel-button:hover {
+
+            background: #f1f5f9;
+
+            color: var(--text);
+
+            border-color: #cbd5e1;
+        }
+
+
+        .save-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            min-height: 42px;
+
+            padding: 10px 19px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--secondary)
+                );
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            box-shadow:
+                0 7px 18px rgba(37, 99, 235, 0.20);
+
+            transition: all 0.25s ease;
+        }
+
+
+        .save-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 22px rgba(37, 99, 235, 0.27);
+
+            color: white;
+        }
+
+
+        /* =========================================
+           EMPLOYEE IDENTIFIER
+        ========================================= */
+
+        .employee-id-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            background: #eff6ff;
+
+            color: var(--primary);
+
+            font-size: 9px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 768px) {
+
+            .edit-page-header {
+
+                align-items: flex-start;
+
+                gap: 15px;
+
+                flex-direction: column;
+            }
+
+
+            .edit-employee-card {
+
+                padding: 18px;
+            }
+
+
+            .form-actions {
+
+                flex-direction: column-reverse;
+
+                align-items: stretch;
+            }
+
+
+            .cancel-button,
+            .save-button {
+
+                width: 100%;
+            }
+
+        }
+
+
+        @media (max-width: 576px) {
+
+            .dashboard-container {
+
+                padding: 20px 15px 30px;
+            }
+
+
+            .edit-page-header h2 {
+
+                font-size: 19px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar">
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="bi bi-people-fill"></i>
+
+        </div>
+
+        <div>
+
+            <h4>HRMS</h4>
+
+            <span>
+                Human Resource Management
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN MENU -->
+
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+
+    <nav>
+
+
+        <!-- DASHBOARD -->
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="menu-item"
+        >
+
+            <i class="bi bi-speedometer2"></i>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <!-- EMPLOYEES -->
+
+        <a
+            href="{{ url_for('employee_list') }}"
+            class="menu-item active"
+        >
+
+            <i class="bi bi-people"></i>
+
+            <span>
+                Employees
+            </span>
+
+        </a>
+
+
+        <!-- LEAVE -->
+
+        <a
+            href="{{ url_for('leave_list') }}"
+            class="menu-item"
+        >
+
+            <i class="bi bi-calendar-check"></i>
+
+            <span>
+                Leave Management
+            </span>
+
+        </a>
+
+
+        <!-- PAYROLL -->
+
+        <a
+            href="#"
+            class="menu-item"
+        >
+
+            <i class="bi bi-wallet2"></i>
+
+            <span>
+                Payroll
+            </span>
+
+        </a>
+
+
+        <!-- REPORTS -->
+
+        <a
+            href="#"
+            class="menu-item"
+        >
+
+            <i class="bi bi-bar-chart"></i>
+
+            <span>
+                Reports
+            </span>
+
+        </a>
+
+
+        <!-- PROFILE -->
+
+        <a
+            href="#"
+            class="menu-item"
+        >
+
+            <i class="bi bi-person-circle"></i>
+
+            <span>
+                My Profile
+            </span>
+
+        </a>
+
+
+        <!-- SETTINGS -->
+
+        <a
+            href="#"
+            class="menu-item"
+        >
+
+            <i class="bi bi-gear"></i>
+
+            <span>
+                Settings
+            </span>
+
+        </a>
+
+
+        <!-- LOGOUT -->
+
+        <a
+            href="{{ url_for('logout') }}"
+            class="menu-item logout"
+        >
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+    </nav>
+
+</aside>
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<main class="main-content">
+
+
+    <!-- =====================================================
+         TOPBAR
+    ====================================================== -->
+
+    <header class="topbar">
+
+
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+        >
+
+            <i class="bi bi-list"></i>
+
+        </button>
+
+
+        <!-- PAGE TITLE -->
+
+        <div class="page-title">
+
+            <h3>
+                Employee Management
+            </h3>
+
+            <p>
+                Manage your organization's employees
+            </p>
+
+        </div>
+
+
+        <!-- TOPBAR RIGHT -->
+
+        <div class="topbar-right">
+
+
+            <!-- NOTIFICATION -->
+
+            <button
+                type="button"
+                class="notification-button"
+            >
+
+                <i class="bi bi-bell"></i>
+
+                <span class="notification-badge">
+                    3
+                </span>
+
+            </button>
+
+
+            <!-- USER -->
+
+            <div class="user-profile">
+
+                <div class="user-info">
+
+                    <strong>
+                        HR Administrator
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+
+                <div class="user-avatar">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         EDIT EMPLOYEE CONTENT
+    ====================================================== -->
+
+    <div class="dashboard-container">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="edit-page-header">
+
+            <div>
+
+                <h2>
+                    Edit Employee
+                </h2>
+
+                <p>
+                    Update employee information and employment details
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('employee_detail', employee_id=employee['id']) }}"
+                class="back-button"
+            >
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Employee
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FLASH MESSAGES
+        ================================================== -->
+
+        {% with messages = get_flashed_messages(
+            with_categories=true
+        ) %}
+
+            {% if messages %}
+
+                <div class="mb-4">
+
+                    {% for category, message in messages %}
+
+                        <div
+                            class="alert alert-{{ category }} alert-dismissible fade show"
+                            role="alert"
+                        >
+
+                            {{ message }}
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                            ></button>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+
+        <!-- =================================================
+             EDIT EMPLOYEE CARD
+        ================================================== -->
+
+        <div class="edit-employee-card">
+
+
+            <!-- CARD HEADER -->
+
+            <div class="edit-card-header">
+
+                <div class="edit-card-icon">
+
+                    <i class="bi bi-person-gear"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h5>
+                        Employee Information
+                    </h5>
+
+                    <p>
+                        Editing
+                        <strong>{{ employee["name"] }}</strong>
+                        &nbsp;
+
+                        <span class="employee-id-badge">
+                            <i class="bi bi-hash"></i>
+                            {{ employee["id"] }}
+                        </span>
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FORM
+            ================================================== -->
+
+            <form
+                method="POST"
+                action="{{ url_for('edit_employee', employee_id=employee['id']) }}"
+            >
+
+
+                <!-- =============================================
+                     PERSONAL INFORMATION
+                ============================================== -->
+
+                <div class="form-section">
+
+                    <div class="form-section-title">
+
+                        <i class="bi bi-person"></i>
+
+                        Personal Information
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- FIRST NAME -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="first_name"
+                                class="edit-form-label"
+                            >
+
+                                First Name
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                id="first_name"
+                                name="first_name"
+                                class="edit-form-control"
+                                value="{{ first_name }}"
+                                placeholder="Enter first name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- LAST NAME -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="last_name"
+                                class="edit-form-label"
+                            >
+
+                                Last Name
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                id="last_name"
+                                name="last_name"
+                                class="edit-form-control"
+                                value="{{ last_name }}"
+                                placeholder="Enter last name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="email"
+                                class="edit-form-label"
+                            >
+
+                                Email Address
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="edit-form-control"
+                                value="{{ employee['email'] }}"
+                                placeholder="employee@example.com"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- PHONE -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="phone"
+                                class="edit-form-label"
+                            >
+
+                                Phone Number
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                id="phone"
+                                name="phone"
+                                class="edit-form-control"
+                                value="{{ employee['phone'] }}"
+                                placeholder="Enter phone number"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     EMPLOYMENT INFORMATION
+                ============================================== -->
+
+                <div class="form-section">
+
+                    <div class="form-section-title">
+
+                        <i class="bi bi-briefcase"></i>
+
+                        Employment Information
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- DEPARTMENT -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="department"
+                                class="edit-form-label"
+                            >
+
+                                Department
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <select
+                                id="department"
+                                name="department"
+                                class="edit-form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    Select department
+                                </option>
+
+
+                                {% for department in departments %}
+
+                                    <option
+                                        value="{{ department }}"
+                                        {% if department == employee["department"] %}
+                                            selected
+                                        {% endif %}
+                                    >
+
+                                        {{ department }}
+
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- POSITION -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="position"
+                                class="edit-form-label"
+                            >
+
+                                Position
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                id="position"
+                                name="position"
+                                class="edit-form-control"
+                                value="{{ employee['position'] }}"
+                                placeholder="Enter job position"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="status"
+                                class="edit-form-label"
+                            >
+
+                                Employment Status
+
+                            </label>
+
+
+                            <select
+                                id="status"
+                                name="status"
+                                class="edit-form-select"
+                            >
+
+                                <option
+                                    value="Active"
+                                    {% if employee["status"] == "Active" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Active
+                                </option>
+
+
+                                <option
+                                    value="Probation"
+                                    {% if employee["status"] == "Probation" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Probation
+                                </option>
+
+
+                                <option
+                                    value="Inactive"
+                                    {% if employee["status"] == "Inactive" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Inactive
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- SALARY -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="salary"
+                                class="edit-form-label"
+                            >
+
+                                Salary
+
+                            </label>
+
+
+                            <input
+                                type="number"
+                                id="salary"
+                                name="salary"
+                                class="edit-form-control"
+                                value="{{ employee['salary'] }}"
+                                placeholder="Enter salary"
+                                min="0"
+                                step="1"
+                            >
+
+
+                            <div class="edit-form-help">
+
+                                Enter the employee's salary amount.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     FORM ACTIONS
+                ============================================== -->
+
+                <div class="form-actions">
+
+
+                    <!-- CANCEL -->
+
+                    <a
+                        href="{{ url_for('employee_detail', employee_id=employee['id']) }}"
+                        class="cancel-button"
+                    >
+
+                        <i class="bi bi-x-lg"></i>
+
+                        Cancel
+
+                    </a>
+
+
+                    <!-- SAVE -->
+
+                    <button
+                        type="submit"
+                        class="save-button"
+                    >
+
+                        <i class="bi bi-check-lg"></i>
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     BOOTSTRAP JS
+========================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+<!-- =========================================================
+     EMPLOYEES JS
+========================================================= -->
+
+<script
+    src="{{ url_for('static', filename='js/employees.js') }}">
+</script>
+
+<!-- Add this script to EVERY HRMS page, immediately before </body> -->
+
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</body>
+
+</html>

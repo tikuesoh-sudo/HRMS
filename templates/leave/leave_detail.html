@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Leave Details - HRMS</title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Bootstrap Icons -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <!-- Dashboard CSS -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}"
+    >
+
+
+    <!-- Leave CSS -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/leave.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+====================================================== -->
+
+<div class="sidebar" id="sidebar">
+
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="bi bi-people-fill"></i>
+        </div>
+
+        <div>
+
+            <h4>
+                HRMS
+            </h4>
+
+            <span>
+                Management System
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="menu-item"
+    >
+
+        <i class="bi bi-grid-1x2-fill"></i>
+
+        <span>
+            Dashboard
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('employee_list') }}"
+        class="menu-item"
+    >
+
+        <i class="bi bi-people"></i>
+
+        <span>
+            Employees
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('leave_list') }}"
+        class="menu-item active"
+    >
+
+        <i class="bi bi-calendar-check"></i>
+
+        <span>
+            Leave Management
+        </span>
+
+    </a>
+
+
+    <a
+        href="#"
+        class="menu-item"
+    >
+
+        <i class="bi bi-wallet2"></i>
+
+        <span>
+            Payroll
+        </span>
+
+    </a>
+
+
+    <a
+        href="#"
+        class="menu-item"
+    >
+
+        <i class="bi bi-bar-chart"></i>
+
+        <span>
+            Reports
+        </span>
+
+    </a>
+
+
+    <div class="menu-title">
+        SYSTEM
+    </div>
+
+
+    <a
+        href="#"
+        class="menu-item"
+    >
+
+        <i class="bi bi-person-circle"></i>
+
+        <span>
+            My Profile
+        </span>
+
+    </a>
+
+
+    <a
+        href="#"
+        class="menu-item"
+    >
+
+        <i class="bi bi-gear"></i>
+
+        <span>
+            Settings
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('logout') }}"
+        class="menu-item logout"
+    >
+
+        <i class="bi bi-box-arrow-left"></i>
+
+        <span>
+            Logout
+        </span>
+
+    </a>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+====================================================== -->
+
+<div class="main-content">
+
+
+    <!-- TOPBAR -->
+
+    <nav class="topbar">
+
+
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+        >
+
+            <i class="bi bi-list"></i>
+
+        </button>
+
+
+        <div class="page-title">
+
+            <h3>
+                Leave Details
+            </h3>
+
+            <p>
+                Review employee leave application
+            </p>
+
+        </div>
+
+
+        <div class="topbar-right">
+
+            <div class="notification">
+
+                <i class="bi bi-bell"></i>
+
+            </div>
+
+
+            <div class="user-profile">
+
+                <div class="user-avatar">
+                    HR
+                </div>
+
+                <div class="user-info">
+
+                    <strong>
+                        HR Administrator
+                    </strong>
+
+                    <small>
+                        HR Admin
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =================================================
+         BODY
+    ================================================== -->
+
+    <div class="dashboard-container">
+
+
+        <!-- =================================================
+             WELCOME / PAGE BANNER
+        ================================================== -->
+
+        <div class="welcome-banner leave-welcome">
+
+
+            <div>
+
+                <h2>
+                    Leave Application 📋
+                </h2>
+
+                <p>
+                    Review the details of this employee leave request.
+                </p>
+
+            </div>
+
+
+            <div class="detail-status-wrapper">
+
+                {% if leave.status == "Approved" %}
+
+                <span class="status approved detail-status">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Approved
+                </span>
+
+                {% elif leave.status == "Rejected" %}
+
+                <span class="status rejected detail-status">
+                    <i class="bi bi-x-circle-fill"></i>
+                    Rejected
+                </span>
+
+                {% else %}
+
+                <span class="status pending detail-status">
+                    <i class="bi bi-hourglass-split"></i>
+                    Pending
+                </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SUMMARY CARDS
+        ================================================== -->
+
+        <div class="row g-4 mb-4">
+
+
+            <!-- EMPLOYEE -->
+
+            <div class="col-12 col-md-4">
+
+                <div class="stat-card detail-stat-card">
+
+                    <div class="stat-icon employees-icon">
+
+                        <i class="bi bi-person-fill"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Employee
+                        </span>
+
+                        <h3 class="detail-stat-name">
+                            {{ leave.employee }}
+                        </h3>
+
+                        <small>
+                            Leave applicant
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- LEAVE TYPE -->
+
+            <div class="col-12 col-md-4">
+
+                <div class="stat-card detail-stat-card">
+
+                    <div class="stat-icon leave-icon">
+
+                        <i class="bi bi-calendar-event-fill"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Leave Type
+                        </span>
+
+                        <h3>
+                            {{ leave.type }}
+                        </h3>
+
+                        <small>
+                            Requested leave
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DAYS -->
+
+            <div class="col-12 col-md-4">
+
+                <div class="stat-card detail-stat-card">
+
+                    <div class="stat-icon department-icon">
+
+                        <i class="bi bi-calendar-range-fill"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Duration
+                        </span>
+
+                        <h3>
+                            {{ leave.days }}
+                            day{% if leave.days != 1 %}s{% endif %}
+                        </h3>
+
+                        <small>
+                            Total leave duration
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             DETAILS + ACTIONS
+        ================================================== -->
+
+        <div class="row g-4">
+
+
+            <!-- =================================================
+                 REQUEST INFORMATION
+            ================================================== -->
+
+            <div class="col-lg-8">
+
+                <div class="dashboard-card">
+
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h5>
+                                Request Information
+                            </h5>
+
+                            <p>
+                                Complete details of the leave application
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="leave-detail-grid">
+
+
+                        <!-- EMPLOYEE -->
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Employee
+                            </span>
+
+                            <div class="detail-value employee-detail">
+
+                                <div class="small-avatar">
+                                    {{ leave.employee[0] }}{{ leave.employee.split()[1][0] }}
+                                </div>
+
+                                <strong>
+                                    {{ leave.employee }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- LEAVE TYPE -->
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Leave Type
+                            </span>
+
+                            <div class="detail-value">
+
+                                <i class="bi bi-calendar3"></i>
+
+                                {{ leave.type }}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- START DATE -->
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Start Date
+                            </span>
+
+                            <div class="detail-value">
+
+                                <i class="bi bi-calendar-event"></i>
+
+                                {{ leave.start_date }}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- END DATE -->
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                End Date
+                            </span>
+
+                            <div class="detail-value">
+
+                                <i class="bi bi-calendar-event"></i>
+
+                                {{ leave.end_date }}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DURATION -->
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Duration
+                            </span>
+
+                            <div class="detail-value">
+
+                                <i class="bi bi-clock-history"></i>
+
+                                {{ leave.days }}
+                                day{% if leave.days != 1 %}s{% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Current Status
+                            </span>
+
+                            <div class="detail-value">
+
+                                {% if leave.status == "Approved" %}
+
+                                <span class="status approved">
+                                    Approved
+                                </span>
+
+                                {% elif leave.status == "Rejected" %}
+
+                                <span class="status rejected">
+                                    Rejected
+                                </span>
+
+                                {% else %}
+
+                                <span class="status pending">
+                                    Pending
+                                </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- REASON -->
+
+                    <div class="reason-section">
+
+                        <span class="detail-label">
+                            Reason for Leave
+                        </span>
+
+                        <div class="reason-box">
+
+                            <i class="bi bi-chat-left-text"></i>
+
+                            <p>
+                                {{ leave.reason }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ACTION PANEL
+            ================================================== -->
+
+            <div class="col-lg-4">
+
+                <div class="dashboard-card leave-action-card">
+
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h5>
+                                Request Actions
+                            </h5>
+
+                            <p>
+                                Manage this application
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    {% if leave.status == "Pending" %}
+
+
+                    <div class="action-panel">
+
+
+                        <div class="action-message">
+
+                            <div class="action-message-icon">
+
+                                <i class="bi bi-info-circle"></i>
+
+                            </div>
+
+                            <p>
+                                This request is waiting for HR review.
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- APPROVE -->
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('approve_leave', leave_id=leave.id) }}"
+                        >
+
+                            <button
+                                type="submit"
+                                class="leave-action-btn approve-btn"
+                            >
+
+                                <i class="bi bi-check-lg"></i>
+
+                                Approve Request
+
+                            </button>
+
+                        </form>
+
+
+
+                        <!-- REJECT -->
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('reject_leave', leave_id=leave.id) }}"
+                        >
+
+                            <button
+                                type="submit"
+                                class="leave-action-btn reject-btn"
+                            >
+
+                                <i class="bi bi-x-lg"></i>
+
+                                Reject Request
+
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+
+                    {% elif leave.status == "Approved" %}
+
+
+                    <div class="completed-action">
+
+                        <div class="completed-icon approved-completed">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                        </div>
+
+                        <h6>
+                            Request Approved
+                        </h6>
+
+                        <p>
+                            This leave application has already been approved.
+                        </p>
+
+                    </div>
+
+
+                    {% else %}
+
+
+                    <div class="completed-action">
+
+                        <div class="completed-icon rejected-completed">
+
+                            <i class="bi bi-x-circle-fill"></i>
+
+                        </div>
+
+                        <h6>
+                            Request Rejected
+                        </h6>
+
+                        <p>
+                            This leave application has been rejected.
+                        </p>
+
+                    </div>
+
+
+                    {% endif %}
+
+
+
+                    <a
+                        href="{{ url_for('leave_list') }}"
+                        class="back-leave-btn"
+                    >
+
+                        <i class="bi bi-arrow-left"></i>
+
+                        Back to Leave Requests
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- Bootstrap -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+<!-- Dashboard JS -->
+
+<script
+    src="{{ url_for('static', filename='js/dashboard.js') }}">
+</script>
+
+<!-- Add this script to EVERY HRMS page, immediately before </body> -->
+
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</body>
+
+</html>

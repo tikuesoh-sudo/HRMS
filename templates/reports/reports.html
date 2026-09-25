@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Reports - HRMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+</head>
+<body>
+<div class="app-layout">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon"><i class="bi bi-people-fill"></i></div>
+            <div><h4>HRMS</h4><span>Human Resources</span></div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">MAIN MENU</div>
+            <a href="{{ url_for('dashboard') }}" class="nav-link"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+            <a href="{{ url_for('employee_list') }}" class="nav-link"><i class="bi bi-people-fill"></i><span>Employees</span></a>
+            <a href="{{ url_for('leave_list') }}" class="nav-link"><i class="bi bi-calendar-check-fill"></i><span>Leave Management</span></a>
+            <a href="{{ url_for('payroll') }}" class="nav-link"><i class="bi bi-cash-stack"></i><span>Payroll</span></a>
+            <a href="{{ url_for('reports') }}" class="nav-link active"><i class="bi bi-bar-chart-fill"></i><span>Reports</span></a>
+            <div class="nav-section-title mt-4">SYSTEM</div>
+            <a href="{{ url_for('profile') }}" class="nav-link"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+            <a href="{{ url_for('settings') }}" class="nav-link"><i class="bi bi-gear-fill"></i><span>Settings</span></a>
+            <a href="{{ url_for('notifications') }}" class="nav-link"><i class="bi bi-bell-fill"></i><span>Notifications</span>{% if unread_notifications %}<span class="notification-badge">{{ unread_notifications }}</span>{% endif %}</a>
+        </nav>
+        <div class="sidebar-footer"><a href="{{ url_for('logout') }}" class="logout-link"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a></div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-btn" id="sidebarToggle"><i class="bi bi-list"></i></button>
+                <div><h5>HR Reports</h5><span>Overview of employees, payroll and leave activity</span></div>
+            </div>
+            <div class="topbar-right">
+                <a href="{{ url_for('notifications') }}" class="notification-btn">
+                    <i class="bi bi-bell"></i>
+                    {% if unread_notifications %}<span class="notification-badge">{{ unread_notifications }}</span>{% endif %}
+                </a>
+                <div class="topbar-user"><div class="user-avatar">HR</div><div class="user-info"><strong>HR Administrator</strong><span>Administrator</span></div></div>
+            </div>
+        </header>
+
+        <div class="reports-container">
+            <div class="page-header">
+                <div><h1>HR Reports</h1><p>Monitor workforce, payroll and leave management activity.</p></div>
+                <button class="btn report-print-btn" onclick="window.print()"><i class="bi bi-printer"></i> Print Report</button>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}<div class="flash-container">{% for category, message in messages %}<div class="alert alert-{{ category }} alert-dismissible fade show">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>{% endfor %}</div>{% endif %}
+            {% endwith %}
+
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-icon blue"><i class="bi bi-people-fill"></i></div><div class="stat-content"><span>Total Employees</span><h3>{{ total_employees }}</h3><small>All registered employees</small></div></div>
+                <div class="stat-card"><div class="stat-icon green"><i class="bi bi-person-check-fill"></i></div><div class="stat-content"><span>Active Employees</span><h3>{{ active_employees }}</h3><small>Currently active</small></div></div>
+                <div class="stat-card"><div class="stat-icon purple"><i class="bi bi-cash-stack"></i></div><div class="stat-content"><span>Total Payroll</span><h3>{{ "{:,.0f}".format(total_payroll) }} FCFA</h3><small>Generated payroll</small></div></div>
+                <div class="stat-card"><div class="stat-icon orange"><i class="bi bi-calendar-event-fill"></i></div><div class="stat-content"><span>Leave Requests</span><h3>{{ total_leave_requests }}</h3><small>{{ total_leave_days }} total leave days</small></div></div>
+            </div>
+
+            <div class="section-grid">
+                <div class="report-card">
+                    <div class="card-header"><div><h3>Employee Overview</h3><p>Current employee status breakdown</p></div><div class="header-icon"><i class="bi bi-people"></i></div></div>
+                    <div class="employee-status-list">
+                        {% for label, value, cls in [('Active', active_employees, 'active'), ('Probation', probation_employees, 'probation'), ('Inactive', inactive_employees, 'inactive')] %}
+                            <div class="status-row"><div class="status-label"><span class="status-dot {{ cls }}-dot"></span>{{ label }}</div><strong>{{ value }}</strong></div>
+                            <div class="progress"><div class="progress-bar {{ cls }}-bar" style="width: {% if total_employees %}{{ (value / total_employees * 100)|round(0) }}{% else %}0{% endif %}%"></div></div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="report-card">
+                    <div class="card-header"><div><h3>Leave Overview</h3><p>Current leave request activity</p></div><div class="header-icon"><i class="bi bi-calendar-check"></i></div></div>
+                    <div class="leave-summary-grid">
+                        <div class="leave-summary-item"><span>Total Requests</span><strong>{{ total_leave_requests }}</strong></div>
+                        <div class="leave-summary-item pending"><span>Pending</span><strong>{{ pending_leave_requests }}</strong></div>
+                        <div class="leave-summary-item approved"><span>Approved</span><strong>{{ approved_leave_requests }}</strong></div>
+                        <div class="leave-summary-item rejected"><span>Rejected</span><strong>{{ rejected_leave_requests }}</strong></div>
+                    </div>
+                    <div class="total-days-box"><div class="total-days-icon"><i class="bi bi-calendar3"></i></div><div><span>Total Leave Days</span><strong>{{ total_leave_days }} days</strong></div></div>
+                </div>
+            </div>
+
+            <div class="report-card full-card">
+                <div class="card-header"><div><h3>Department Report</h3><p>Employee and payroll information by department</p></div><div class="header-icon"><i class="bi bi-building"></i></div></div>
+                <div class="table-responsive"><table class="report-table"><thead><tr><th>Department</th><th>Employees</th><th>Active</th><th>Active Rate</th><th>Payroll</th></tr></thead><tbody>
+                    {% for department in department_reports %}
+                    <tr>
+                        <td><div class="department-cell"><div class="department-icon"><i class="bi bi-building"></i></div><strong>{{ department.department }}</strong></div></td>
+                        <td>{{ department.employees }}</td><td><span class="active-count">{{ department.active }}</span></td>
+                        <td>{% if department.employees %}{% set active_rate = (department.active / department.employees * 100)|round(0) %}<div class="rate-wrapper"><div class="rate-bar"><div class="rate-fill" style="width: {{ active_rate }}%"></div></div><span>{{ active_rate }}%</span></div>{% else %}<span class="muted">0%</span>{% endif %}</td>
+                        <td><strong>{{ "{:,.0f}".format(department.payroll) }} FCFA</strong></td>
+                    </tr>
+                    {% else %}<tr><td colspan="5"><div class="empty-table"><i class="bi bi-building"></i><p>No department data available.</p></div></td></tr>{% endfor %}
+                </tbody></table></div>
+            </div>
+
+            <div class="section-grid">
+                <div class="report-card">
+                    <div class="card-header"><div><h3>Payroll Summary</h3><p>Payroll processing overview</p></div><div class="header-icon"><i class="bi bi-wallet2"></i></div></div>
+                    <div class="payroll-summary">
+                        <div class="summary-box total"><span>Total Payroll</span><strong>{{ "{:,.0f}".format(payroll_total) }}</strong><small>FCFA</small></div>
+                        <div class="summary-box paid"><span>Paid</span><strong>{{ "{:,.0f}".format(payroll_paid) }}</strong><small>{{ paid_payroll_records }} records</small></div>
+                        <div class="summary-box pending"><span>Pending</span><strong>{{ "{:,.0f}".format(payroll_pending) }}</strong><small>{{ pending_payroll_records }} records</small></div>
+                    </div>
+                    <div class="salary-info"><div><span>Total Employee Salary</span><strong>{{ "{:,.0f}".format(total_salary) }} FCFA</strong></div><div><span>Average Salary</span><strong>{{ "{:,.0f}".format(average_salary) }} FCFA</strong></div></div>
+                </div>
+
+                <div class="report-card">
+                    <div class="card-header"><div><h3>Leave by Type</h3><p>Requests grouped by leave type</p></div><div class="header-icon"><i class="bi bi-calendar2-week"></i></div></div>
+                    <div class="leave-type-list">
+                        {% for leave_type, data in leave_type_reports.items() %}<div class="leave-type-row"><div class="leave-type-icon"><i class="bi bi-calendar-event"></i></div><div class="leave-type-info"><strong>{{ leave_type }}</strong><span>{{ data.requests }} request{% if data.requests != 1 %}s{% endif %}</span></div><div class="leave-type-days"><strong>{{ data.days }}</strong><span>days</span></div></div>
+                        {% else %}<div class="empty-small"><i class="bi bi-calendar-x"></i><p>No leave data available.</p></div>{% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-grid">
+                <div class="report-card">
+                    <div class="card-header"><div><h3>Recent Payroll</h3><p>Latest payroll records</p></div><a href="{{ url_for('payroll') }}" class="view-all-btn">View All <i class="bi bi-arrow-right"></i></a></div>
+                    <div class="activity-list">
+                        {% for record in recent_payroll %}<div class="activity-item"><div class="activity-avatar">{{ record.employee[0]|upper }}</div><div class="activity-info"><strong>{{ record.employee }}</strong><span>{{ record.pay_period }}</span></div><div class="activity-amount"><strong>{{ "{:,.0f}".format(record.net_salary) }}</strong><span class="currency">FCFA</span>{% if record.status == 'Paid' %}<span class="mini-status paid">Paid</span>{% else %}<span class="mini-status pending">Pending</span>{% endif %}</div></div>
+                        {% else %}<div class="empty-small"><i class="bi bi-wallet2"></i><p>No payroll records available.</p></div>{% endfor %}
+                    </div>
+                </div>
+
+                <div class="report-card">
+                    <div class="card-header"><div><h3>Recent Leave</h3><p>Latest leave requests</p></div><a href="{{ url_for('leave_list') }}" class="view-all-btn">View All <i class="bi bi-arrow-right"></i></a></div>
+                    <div class="activity-list">
+                        {% for leave in recent_leave %}<div class="activity-item"><div class="activity-avatar leave-avatar">{{ leave.employee[0]|upper }}</div><div class="activity-info"><strong>{{ leave.employee }}</strong><span>{{ leave.type }} · {{ leave.days }} day{% if leave.days != 1 %}s{% endif %}</span></div><div class="leave-activity-status">{% if leave.status == 'Approved' %}<span class="mini-status approved">Approved</span>{% elif leave.status == 'Rejected' %}<span class="mini-status rejected">Rejected</span>{% else %}<span class="mini-status pending">Pending</span>{% endif %}</div></div>
+                        {% else %}<div class="empty-small"><i class="bi bi-calendar-x"></i><p>No leave requests available.</p></div>{% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-footer"><div><i class="bi bi-info-circle"></i><span>Report generated from the current HRMS records.</span></div><span>{{ total_employees }} employees · {{ total_payroll_records }} payroll records · {{ total_leave_requests }} leave requests</span></div>
+        </div>
+    </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const sidebar=document.getElementById('sidebar');const sidebarToggle=document.getElementById('sidebarToggle');
+if(sidebarToggle){sidebarToggle.addEventListener('click',()=>sidebar.classList.toggle('show'));}
+document.addEventListener('click',event=>{if(window.innerWidth<=992&&sidebar.classList.contains('show')&&!sidebar.contains(event.target)&&!sidebarToggle.contains(event.target)){sidebar.classList.remove('show');}});
+</script>
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</body>
+</html>

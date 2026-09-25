@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>HRMS | Dashboard</title>
+
+
+    <!-- =====================================
+         BOOTSTRAP
+    ====================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================
+         BOOTSTRAP ICONS
+    ====================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <!-- =====================================
+         DASHBOARD CSS
+    ====================================== -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+====================================================== -->
+
+<div
+    class="sidebar"
+    id="sidebar"
+>
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <i class="bi bi-people-fill"></i>
+
+        </div>
+
+        <div>
+
+            <h4>HRMS</h4>
+
+            <span>
+                Management System
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN MENU -->
+
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="menu-item active"
+    >
+
+        <i class="bi bi-grid-1x2-fill"></i>
+
+        <span>
+            Dashboard
+        </span>
+
+    </a>
+
+
+    <!-- EMPLOYEES -->
+
+    <a
+        href="{{ url_for('employee_list') }}"
+        class="menu-item"
+    >
+
+        <i class="bi bi-people"></i>
+
+        <span>
+            Employees
+        </span>
+
+    </a>
+
+
+    <!-- LEAVE -->
+
+    <a
+        href="{{ url_for('leave_list') }}"
+        class="menu-item"
+    >
+
+        <i class="bi bi-calendar-check"></i>
+
+        <span>
+            Leave Management
+        </span>
+
+    </a>
+
+
+    <!-- PAYROLL -->
+
+    <a
+        href="{{ url_for('payroll') }}"
+        class="menu-item"
+    >
+
+        <i class="bi bi-wallet2"></i>
+
+        <span>
+            Payroll
+        </span>
+
+    </a>
+
+
+    <!-- REPORTS -->
+
+    <a
+        href="{{ url_for('reports') }}"
+        class="menu-item"
+    >
+
+        <i class="bi bi-bar-chart"></i>
+
+        <span>
+            Reports
+        </span>
+
+    </a>
+
+
+    <!-- SYSTEM -->
+
+    <div class="menu-title">
+        SYSTEM
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <a
+        href="{{ url_for('profile') }}"
+        class="menu-item"
+    >
+
+        <i class="bi bi-person-circle"></i>
+
+        <span>
+            My Profile
+        </span>
+
+    </a>
+
+
+    <!-- SETTINGS -->
+
+    <a
+        href="{{ url_for('settings') }}"
+        class="menu-item"
+    >
+
+        <i class="bi bi-gear"></i>
+
+        <span>
+            Settings
+        </span>
+
+    </a>
+
+
+    <!-- NOTIFICATIONS -->
+
+    <a
+        href="{{ url_for('notifications') }}"
+        class="menu-item"
+    >
+
+        <i class="bi bi-bell"></i>
+
+        <span>
+            Notifications
+        </span>
+
+        {% if unread_notifications > 0 %}
+
+            <span class="notification-sidebar-badge">
+                {{ unread_notifications }}
+            </span>
+
+        {% endif %}
+
+    </a>
+
+
+    <!-- LOGOUT -->
+
+    <a
+        href="{{ url_for('logout') }}"
+        class="menu-item logout"
+    >
+
+        <i class="bi bi-box-arrow-left"></i>
+
+        <span>
+            Logout
+        </span>
+
+    </a>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+====================================================== -->
+
+<div class="main-content">
+
+
+    <!-- =================================================
+         TOP NAVBAR
+    ================================================== -->
+
+    <nav class="topbar">
+
+
+        <!-- SIDEBAR BUTTON -->
+
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+        >
+
+            <i class="bi bi-list"></i>
+
+        </button>
+
+
+        <!-- PAGE TITLE -->
+
+        <div class="page-title">
+
+            <h3>
+                Dashboard
+            </h3>
+
+            <p>
+                Welcome back to your HRMS
+            </p>
+
+        </div>
+
+
+        <!-- TOPBAR RIGHT -->
+
+        <div class="topbar-right">
+
+
+            <!-- =================================================
+                 NOTIFICATION BELL
+            ================================================== -->
+
+            <a
+                href="{{ url_for('notifications') }}"
+                class="notification-button"
+                title="View Notifications"
+                aria-label="View Notifications"
+            >
+
+                <i class="bi bi-bell"></i>
+
+
+                {% if unread_notifications > 0 %}
+
+                    <span class="notification-badge">
+
+                        {{ unread_notifications }}
+
+                    </span>
+
+                {% endif %}
+
+            </a>
+
+
+            <!-- USER -->
+
+            <div class="user-profile">
+
+                <div class="user-avatar">
+                    HA
+                </div>
+
+                <div class="user-info">
+
+                    <strong>
+                        HR Administrator
+                    </strong>
+
+                    <small>
+                        HR Admin
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =================================================
+         DASHBOARD BODY
+    ================================================== -->
+
+    <div class="dashboard-container">
+
+
+        <!-- =================================================
+             WELCOME BANNER
+        ================================================== -->
+
+        <div class="welcome-banner">
+
+            <div>
+
+                <h2>
+                    Good morning, HR Administrator! 👋
+                </h2>
+
+                <p>
+                    Here's what's happening with your
+                    organization today.
+                </p>
+
+            </div>
+
+
+            <div class="date-display">
+
+                <i class="bi bi-calendar3"></i>
+
+                <span id="currentDate">
+                    Loading date...
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+        <div class="row g-4 mb-4">
+
+
+            <!-- TOTAL EMPLOYEES -->
+
+            <div class="col-12 col-sm-6 col-xl-3">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon employees-icon">
+
+                        <i class="bi bi-people-fill"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Total Employees
+                        </span>
+
+                        <h3>
+                            {{ total_employees }}
+                        </h3>
+
+                        <small class="positive">
+
+                            <i class="bi bi-arrow-up"></i>
+
+                            8% this month
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MONTHLY PAYROLL -->
+
+            <div class="col-12 col-sm-6 col-xl-3">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon payroll-icon">
+
+                        <i class="bi bi-cash-stack"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Monthly Payroll
+                        </span>
+
+                        <h3>
+
+                            XAF {{ "{:,.0f}".format(monthly_payroll) }}
+
+                        </h3>
+
+                        <small>
+                            Current month
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LEAVE REQUESTS -->
+
+            <div class="col-12 col-sm-6 col-xl-3">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon leave-icon">
+
+                        <i class="bi bi-calendar-check-fill"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Leave Requests
+                        </span>
+
+                        <h3>
+                            {{ total_leave_requests }}
+                        </h3>
+
+                        <small class="warning">
+
+                            {{ pending_leave_requests }}
+                            pending
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DEPARTMENTS -->
+
+            <div class="col-12 col-sm-6 col-xl-3">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon department-icon">
+
+                        <i class="bi bi-building"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Departments
+                        </span>
+
+                        <h3>
+                            {{ total_departments }}
+                        </h3>
+
+                        <small>
+                            Active departments
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             CHART + QUICK ACTIONS
+        ================================================== -->
+
+        <div class="row g-4 mb-4">
+
+
+            <!-- PAYROLL CHART -->
+
+            <div class="col-lg-8">
+
+                <div class="dashboard-card chart-card">
+
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h5>
+                                Payroll Overview
+                            </h5>
+
+                            <p>
+                                Monthly payroll expenditure (XAF)
+                            </p>
+
+                        </div>
+
+
+                        <select
+                            class="form-select"
+                            id="payrollYear"
+                        >
+
+                            <option value="2026">
+                                2026
+                            </option>
+
+                            <option value="2025">
+                                2025
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="chart-container">
+
+                        <canvas
+                            id="payrollChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="col-lg-4">
+
+                <div class="dashboard-card">
+
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h5>
+                                Quick Actions
+                            </h5>
+
+                            <p>
+                                Frequently used actions
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+
+                        <!-- ADD EMPLOYEE -->
+
+                        <a
+                            href="{{ url_for('employee_list') }}"
+                            class="quick-action text-decoration-none"
+                        >
+
+                            <div class="quick-icon employee-action">
+
+                                <i class="bi bi-person-plus"></i>
+
+                            </div>
+
+                            <span>
+                                Add Employee
+                            </span>
+
+                            <i class="bi bi-chevron-right"></i>
+
+                        </a>
+
+
+
+                        <!-- PAYROLL -->
+
+                        <a
+                            href="{{ url_for('payroll') }}"                        
+                            class="quick-action text-decoration-none"
+                        
+                        >
+
+                            <div class="quick-icon payroll-action">
+
+                                <i class="bi bi-wallet-fill"></i>
+
+                            </div>
+
+                            <span>
+                                Process Payroll
+                            </span>
+
+                            <i class="bi bi-chevron-right"></i>
+
+                        </a>
+
+
+
+                        <!-- LEAVE -->
+
+                        <a
+                           href="{{ url_for('leave_list') }}"
+                            class="quick-action text-decoration-none"
+                            
+                        >
+
+                            <div class="quick-icon leave-action">
+
+                                <i class="bi bi-calendar-plus"></i>
+
+                            </div>
+
+                            <span>
+                                Leave Requests
+                            </span>
+
+                            <i class="bi bi-chevron-right"></i>
+
+                        </a>
+
+
+
+                        <!-- REPORT -->
+
+                        <a
+                           href="{{ url_for('reports')}}"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-icon report-action">
+
+                                <i class="bi bi-file-earmark-bar-graph-fill"></i>
+
+                            </div>
+
+                            <span>
+                                Generate Report
+                            </span>
+
+                            <i class="bi bi-chevron-right"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TABLES
+        ================================================== -->
+
+        <div class="row g-4">
+
+
+            <!-- RECENT EMPLOYEES -->
+
+            <div class="col-lg-7">
+
+                <div class="dashboard-card">
+
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h5>
+                                Recent Employees
+                            </h5>
+
+                            <p>
+                                Recently added employees
+                            </p>
+
+                        </div>
+
+
+                        <a href="{{ url_for('employee_list') }}">
+                            View All
+                        </a>
+
+                    </div>
+
+
+
+                    <div class="table-responsive">
+
+                        <table class="table employee-table">
+
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Employee
+                                    </th>
+
+                                    <th>
+                                        Department
+                                    </th>
+
+                                    <th>
+                                        Position
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                {% if employees %}
+
+
+                                    {% for employee in employees %}
+
+                                    <tr>
+
+
+                                        <td>
+
+                                            <div class="employee-name">
+
+
+                                                <div class="small-avatar">
+
+                                                    {{ employee.name[0] }}{{ employee.name.split()[1][0] }}
+
+                                                </div>
+
+
+                                                <span>
+
+                                                    {{ employee.name }}
+
+                                                </span>
+
+                                            </div>
+
+                                        </td>
+
+
+
+                                        <td>
+
+                                            {{ employee.department }}
+
+                                        </td>
+
+
+
+                                        <td>
+
+                                            {{ employee.position }}
+
+                                        </td>
+
+
+
+                                        <td>
+
+
+                                            {% if employee.status == "Active" %}
+
+                                                <span class="status active">
+
+                                                    Active
+
+                                                </span>
+
+                                            {% else %}
+
+                                                <span class="status pending">
+
+                                                    {{ employee.status }}
+
+                                                </span>
+
+                                            {% endif %}
+
+
+                                        </td>
+
+
+                                    </tr>
+
+                                    {% endfor %}
+
+
+                                {% else %}
+
+
+                                    <tr>
+
+                                        <td
+                                            colspan="4"
+                                            class="text-center"
+                                        >
+
+                                            No employees found.
+
+                                        </td>
+
+                                    </tr>
+
+
+                                {% endif %}
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LEAVE REQUESTS -->
+
+            <div class="col-lg-5">
+
+                <div class="dashboard-card">
+
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h5>
+                                Leave Requests
+                            </h5>
+
+                            <p>
+                                Recent leave applications
+                            </p>
+
+                        </div>
+
+
+                        <a href="{{ url_for('leave_list') }}">
+                            View All
+                        </a>
+
+                    </div>
+
+
+
+                    <div class="leave-list">
+
+
+                        {% if leave_requests %}
+
+
+                            {% for leave in leave_requests %}
+
+
+                            <div class="leave-item">
+
+
+                                <!-- AVATAR -->
+
+                                <div class="small-avatar">
+
+                                    {{ leave.employee[0] }}{{ leave.employee.split()[1][0] }}
+
+                                </div>
+
+
+
+                                <!-- LEAVE INFORMATION -->
+
+                                <div class="leave-info">
+
+                                    <strong>
+
+                                        {{ leave.employee }}
+
+                                    </strong>
+
+                                    <span>
+
+                                        {{ leave.type }}
+                                        ·
+                                        {{ leave.days }}
+                                        days
+
+                                    </span>
+
+                                </div>
+
+
+
+                                <!-- STATUS -->
+
+                                {% if leave.status == "Approved" %}
+
+                                    <span class="status approved">
+
+                                        Approved
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status pending">
+
+                                        {{ leave.status }}
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            <div class="text-center p-4">
+
+                                <p class="mb-0">
+
+                                    No leave requests found.
+
+                                </p>
+
+                            </div>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     CHART.JS
+====================================================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js">
+</script>
+
+
+
+<!-- =====================================================
+     BOOTSTRAP JAVASCRIPT
+====================================================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+
+<!-- =====================================================
+     DASHBOARD JAVASCRIPT
+====================================================== -->
+
+<script
+    src="{{ url_for('static', filename='js/dashboard.js') }}">
+</script>
+
+
+<!-- =====================================================
+     SETTINGS JAVASCRIPT
+====================================================== -->
+
+<script
+    src="{{ url_for('static', filename='js/settings.js') }}">
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRMS | Leave Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/leave.css') }}">
+</head>
+<body>
+<div class="sidebar" id="sidebar">
+    <div class="brand">
+        <div class="brand-icon"><i class="bi bi-people-fill"></i></div>
+        <div><h4>HRMS</h4><span>Management System</span></div>
+    </div>
+    <div class="menu-title">MAIN MENU</div>
+    <a href="{{ url_for('dashboard') }}" class="menu-item"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+    <a href="{{ url_for('employee_list') }}" class="menu-item"><i class="bi bi-people"></i><span>Employees</span></a>
+    <a href="{{ url_for('leave_list') }}" class="menu-item active"><i class="bi bi-calendar-check"></i><span>Leave Management</span></a>
+    <a href="{{ url_for('payroll') }}" class="menu-item"><i class="bi bi-wallet2"></i><span>Payroll</span></a>
+    <a href="{{ url_for('reports')}}" class="menu-item"><i class="bi bi-bar-chart"></i><span>Reports</span></a>
+    <div class="menu-title">SYSTEM</div>
+    <a href="#" class="menu-item"><i class="bi bi-person-circle"></i><span>My Profile</span></a>
+    <a href="#" class="menu-item"><i class="bi bi-gear"></i><span>Settings</span></a>
+    <a href="{{ url_for('logout') }}" class="menu-item logout"><i class="bi bi-box-arrow-left"></i><span>Logout</span></a>
+</div>
+
+<div class="main-content">
+    <nav class="topbar">
+        <button class="sidebar-toggle" id="sidebarToggle" type="button"><i class="bi bi-list"></i></button>
+        <div class="page-title">
+            <h3>Leave Management</h3>
+            <p>Manage employee leave requests</p>
+        </div>
+        <div class="topbar-right">
+            <button class="notification-button" type="button">
+                <i class="bi bi-bell"></i>
+                <span class="notification-badge">{{ pending_leave_requests }}</span>
+            </button>
+            <div class="user-profile">
+                <div class="user-avatar">HA</div>
+                <div class="user-info"><strong>HR Administrator</strong><small>HR Admin</small></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="welcome-banner leave-welcome">
+            <div>
+                <h2>Leave Management 📅</h2>
+                <p>Review and manage employee leave requests.</p>
+            </div>
+            <div>
+                <a href="{{ url_for('apply_leave') }}" class="leave-primary-btn"><i class="bi bi-plus-lg"></i> Apply Leave</a>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-icon leave-icon"><i class="bi bi-calendar-check-fill"></i></div>
+                    <div class="stat-content"><span>Total Requests</span><h3>{{ total_leave_requests }}</h3><small>All leave requests</small></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-icon pending-leave-icon"><i class="bi bi-hourglass-split"></i></div>
+                    <div class="stat-content"><span>Pending</span><h3>{{ pending_leave_requests }}</h3><small class="warning">Awaiting review</small></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-icon approved-leave-icon"><i class="bi bi-check-circle-fill"></i></div>
+                    <div class="stat-content"><span>Approved</span><h3>{{ approved_leave_requests }}</h3><small class="positive">Approved requests</small></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-icon rejected-leave-icon"><i class="bi bi-x-circle-fill"></i></div>
+                    <div class="stat-content"><span>Rejected</span><h3>{{ rejected_leave_requests }}</h3><small>Rejected requests</small></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <div class="card-header-custom">
+                        <div><h5>Leave Requests</h5><p>Review all employee leave applications</p></div>
+                        <a href="{{ url_for('apply_leave') }}" class="leave-header-btn"><i class="bi bi-plus-lg"></i> New Request</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table leave-table">
+                            <thead><tr><th>Employee</th><th>Leave Type</th><th>Dates</th><th>Days</th><th>Status</th><th class="text-end">Action</th></tr></thead>
+                            <tbody>
+                            {% if leave_requests %}
+                                {% for leave in leave_requests %}
+                                <tr>
+                                    <td>
+                                        <div class="employee-cell">
+                                            <div class="small-avatar">{{ leave.employee[0] }}{{ leave.employee.split()[1][0] if leave.employee.split()|length > 1 else '' }}</div>
+                                            <div><strong class="employee-name">{{ leave.employee }}</strong></div>
+                                        </div>
+                                    </td>
+                                    <td><span class="leave-type">{{ leave.get('type', leave.get('leave_type', 'Leave')) }}</span></td>
+                                    <td><span class="leave-dates">{{ leave.start_date }} <span>→</span> {{ leave.end_date }}</span></td>
+                                    <td><span class="days-badge">{{ leave.days }} day{% if leave.days != 1 %}s{% endif %}</span></td>
+                                    <td>
+                                        {% if leave.status == 'Approved' %}
+                                            <span class="status approved"><i class="bi bi-check-circle"></i> Approved</span>
+                                        {% elif leave.status == 'Rejected' %}
+                                            <span class="status rejected"><i class="bi bi-x-circle"></i> Rejected</span>
+                                        {% else %}
+                                            <span class="status pending"><i class="bi bi-clock"></i> Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ url_for('leave_detail', leave_id=leave.id) }}" class="leave-view-btn" title="View Details"><i class="bi bi-eye"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="6" class="leave-empty"><div><i class="bi bi-calendar-x"></i><h5>No Leave Requests</h5><p>There are currently no leave requests.</p><a href="{{ url_for('apply_leave') }}" class="leave-primary-btn"><i class="bi bi-plus-lg"></i> Apply Leave</a></div></td></tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</body>
+</html>

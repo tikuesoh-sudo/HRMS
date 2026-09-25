@@ -1,0 +1,1139 @@
+/* =====================================================
+   LEAVE MANAGEMENT
+   Dashboard-style design
+===================================================== */
+
+
+/* =====================================================
+   WELCOME BANNER
+===================================================== */
+
+.leave-welcome {
+    margin-bottom: 24px;
+}
+
+
+.leave-primary-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #ffffff;
+
+    background: #4f46e5;
+
+    transition: all 0.2s ease;
+
+}
+
+
+.leave-primary-btn:hover {
+
+    color: #ffffff;
+
+    background: #4338ca;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =====================================================
+   LEAVE STAT ICONS
+===================================================== */
+
+.pending-leave-icon {
+
+    background: rgba(245, 158, 11, 0.12);
+
+    color: #f59e0b;
+
+}
+
+
+.approved-leave-icon {
+
+    background: rgba(16, 185, 129, 0.12);
+
+    color: #10b981;
+
+}
+
+
+.rejected-leave-icon {
+
+    background: rgba(239, 68, 68, 0.12);
+
+    color: #ef4444;
+
+}
+
+
+/* =====================================================
+   HEADER BUTTON
+===================================================== */
+
+.leave-header-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 9px 14px;
+
+    border-radius: 9px;
+
+    background: #4f46e5;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition: all 0.2s ease;
+
+}
+
+
+.leave-header-btn:hover {
+
+    background: #4338ca;
+
+    color: #ffffff;
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.leave-table {
+
+    margin-bottom: 0;
+
+    vertical-align: middle;
+
+}
+
+
+.leave-table thead th {
+
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    color: #6b7280;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+
+    white-space: nowrap;
+
+}
+
+
+.leave-table tbody td {
+
+    padding: 17px 18px;
+
+    border-bottom: 1px solid #f0f1f3;
+
+    color: #374151;
+
+    font-size: 13px;
+
+}
+
+
+.leave-table tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+.leave-table tbody tr {
+
+    transition: background 0.2s ease;
+
+}
+
+
+.leave-table tbody tr:hover {
+
+    background: #fafafa;
+
+}
+
+
+/* =====================================================
+   EMPLOYEE
+===================================================== */
+
+.employee-name {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+}
+
+
+.employee-name span {
+
+    font-weight: 600;
+
+    color: #1f2937;
+
+}
+
+
+.small-avatar {
+
+    width: 38px;
+
+    height: 38px;
+
+    min-width: 38px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+/* =====================================================
+   LEAVE TYPE
+===================================================== */
+
+.leave-type {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.leave-type i {
+
+    color: #6366f1;
+
+    font-size: 15px;
+
+}
+
+
+/* =====================================================
+   DATES
+===================================================== */
+
+.leave-dates {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.leave-dates strong {
+
+    color: #374151;
+
+    font-weight: 500;
+
+}
+
+
+.leave-dates span {
+
+    color: #9ca3af;
+
+}
+
+
+/* =====================================================
+   DAYS
+===================================================== */
+
+.days-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 7px;
+
+    background: #f3f4f6;
+
+    color: #374151;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+.status.pending {
+
+    background: #fff7ed;
+
+    color: #d97706;
+
+}
+
+
+.status.approved {
+
+    background: #ecfdf5;
+
+    color: #059669;
+
+}
+
+
+.status.rejected {
+
+    background: #fef2f2;
+
+    color: #dc2626;
+
+}
+
+
+/* =====================================================
+   VIEW BUTTON
+===================================================== */
+
+.leave-view-btn {
+
+    width: 34px;
+
+    height: 34px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #f3f4f6;
+
+    color: #4f46e5;
+
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+
+}
+
+
+.leave-view-btn:hover {
+
+    background: #eef2ff;
+
+    color: #4338ca;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.leave-empty {
+
+    padding: 70px 20px !important;
+
+    text-align: center;
+
+}
+
+
+.leave-empty i {
+
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: #9ca3af;
+
+    font-size: 40px;
+
+}
+
+
+.leave-empty h6 {
+
+    margin-bottom: 5px;
+
+    color: #374151;
+
+    font-size: 15px;
+
+}
+
+
+.leave-empty p {
+
+    margin: 0;
+
+    color: #9ca3af;
+
+    font-size: 13px;
+
+}
+
+
+/* =====================================================
+   DETAIL PAGE
+===================================================== */
+
+.detail-status-wrapper {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.detail-status {
+
+    padding: 9px 15px;
+
+    font-size: 12px;
+
+}
+
+
+/* =====================================================
+   DETAIL STAT CARDS
+===================================================== */
+
+.detail-stat-card {
+
+    min-height: 105px;
+
+}
+
+
+.detail-stat-name {
+
+    font-size: 17px !important;
+
+    line-height: 1.3;
+
+}
+
+
+.detail-stat-card .stat-content h3 {
+
+    font-size: 17px;
+
+    margin-bottom: 4px;
+
+}
+
+
+/* =====================================================
+   DETAIL INFORMATION CARD
+===================================================== */
+
+.leave-detail-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 0;
+
+    padding: 4px 24px 0;
+
+}
+
+
+.detail-item {
+
+    padding: 19px 18px;
+
+    border-bottom: 1px solid #f0f1f3;
+
+}
+
+
+.detail-item:nth-child(odd) {
+
+    border-right: 1px solid #f0f1f3;
+
+}
+
+
+.detail-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+
+}
+
+
+.detail-value {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #1f2937;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+}
+
+
+.detail-value i {
+
+    color: #6366f1;
+
+}
+
+
+.employee-detail {
+
+    gap: 10px;
+
+}
+
+
+.employee-detail .small-avatar {
+
+    width: 32px;
+
+    height: 32px;
+
+    min-width: 32px;
+
+    font-size: 10px;
+
+}
+
+
+/* =====================================================
+   REASON
+===================================================== */
+
+.reason-section {
+
+    padding: 24px;
+
+}
+
+
+.reason-box {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 17px;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    border: 1px solid #eef0f3;
+
+}
+
+
+.reason-box i {
+
+    margin-top: 2px;
+
+    color: #6366f1;
+
+    font-size: 17px;
+
+}
+
+
+.reason-box p {
+
+    margin: 0;
+
+    color: #4b5563;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+}
+
+
+/* =====================================================
+   ACTION CARD
+===================================================== */
+
+.leave-action-card {
+
+    height: 100%;
+
+}
+
+
+.action-panel {
+
+    padding: 0 24px 20px;
+
+}
+
+
+.action-message {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+    padding: 13px;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+}
+
+
+.action-message-icon {
+
+    color: #6366f1;
+
+    font-size: 16px;
+
+}
+
+
+.action-message p {
+
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.action-panel form {
+
+    margin-bottom: 10px;
+
+}
+
+
+.leave-action-btn {
+
+    width: 100%;
+
+    min-height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+
+}
+
+
+.approve-btn {
+
+    background: #10b981;
+
+    color: #ffffff;
+
+}
+
+
+.approve-btn:hover {
+
+    background: #059669;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+
+}
+
+
+.reject-btn {
+
+    background: #fef2f2;
+
+    color: #dc2626;
+
+    border: 1px solid #fecaca;
+
+}
+
+
+.reject-btn:hover {
+
+    background: #fee2e2;
+
+    color: #b91c1c;
+
+}
+
+
+/* =====================================================
+   COMPLETED ACTION
+===================================================== */
+
+.completed-action {
+
+    padding: 20px 24px 25px;
+
+    text-align: center;
+
+}
+
+
+.completed-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 25px;
+
+}
+
+
+.approved-completed {
+
+    background: #ecfdf5;
+
+    color: #10b981;
+
+}
+
+
+.rejected-completed {
+
+    background: #fef2f2;
+
+    color: #ef4444;
+
+}
+
+
+.completed-action h6 {
+
+    margin-bottom: 6px;
+
+    color: #1f2937;
+
+    font-size: 15px;
+
+}
+
+
+.completed-action p {
+
+    margin: 0;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+.back-leave-btn {
+
+    margin: 0 24px 24px;
+
+    min-height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 9px;
+
+    color: #4b5563;
+
+    background: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition: all 0.2s ease;
+
+}
+
+
+.back-leave-btn:hover {
+
+    background: #f9fafb;
+
+    color: #4f46e5;
+
+    border-color: #c7d2fe;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 991px) {
+
+    .leave-detail-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .detail-item:nth-child(odd) {
+
+        border-right: none;
+
+    }
+
+}
+
+
+@media (max-width: 767px) {
+
+    .leave-welcome {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 18px;
+
+    }
+
+
+    .leave-primary-btn {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+
+    .leave-table {
+
+        min-width: 850px;
+
+    }
+
+
+    .leave-detail-grid {
+
+        padding-left: 12px;
+
+        padding-right: 12px;
+
+    }
+
+
+    .detail-item {
+
+        padding-left: 12px;
+
+        padding-right: 12px;
+
+    }
+
+
+    .reason-section {
+
+        padding: 18px;
+
+    }
+
+}
+
+
+@media (max-width: 575px) {
+
+    .detail-status-wrapper {
+
+        width: 100%;
+
+        justify-content: flex-start;
+
+    }
+
+
+    .detail-status {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+}
+/* Add these rules to every page CSS file so the saved
+    Settings dark mode applies across the entire HRMS system. */
+
+html[data-theme="dark"] body {
+    background: #0b1120 !important;
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .dashboard-card,
+html[data-theme="dark"] .employee-card,
+html[data-theme="dark"] .table-card,
+html[data-theme="dark"] .content-card,
+html[data-theme="dark"] .report-card,
+html[data-theme="dark"] .profile-card,
+html[data-theme="dark"] .payroll-card {
+    background: #111827 !important;
+    color: #e5e7eb !important;
+    border-color: #263244 !important;
+}
+
+html[data-theme="dark"] table {
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .table {
+    --bs-table-bg: #111827;
+    --bs-table-color: #e5e7eb;
+    --bs-table-border-color: #263244;
+}
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select,
+html[data-theme="dark"] textarea {
+    background: #0f172a !important;
+    color: #e5e7eb !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .modal-content {
+    background: #111827 !important;
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .dropdown-menu {
+    background: #111827 !important;
+    border-color: #263244 !important;
+}
+
+html[data-theme="dark"] .dropdown-item {
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .dropdown-item:hover {
+    background: #1e293b !important;
+}
+
+html[data-theme="dark"] .text-muted {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .border,
+html[data-theme="dark"] .border-bottom,
+html[data-theme="dark"] .border-top {
+    border-color: #263244 !important;
+}
+
+html[data-theme="dark"] .btn-light {
+    background: #1e293b !important;
+    color: #e5e7eb !important;
+    border-color: #334155 !important;
+}
+
+
+/* COMPACT SIDEBAR */
+
+body.compact-sidebar .main-content {
+    margin-left: 82px !important;
+}
+
+body.compact-sidebar .sidebar {
+    width: 82px !important;
+}
+
+body.compact-sidebar .sidebar-logo {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+body.compact-sidebar .sidebar-logo > div:last-child {
+    display: none;
+}
+
+body.compact-sidebar .menu-title {
+    display: none;
+}
+
+body.compact-sidebar .menu-item {
+    justify-content: center;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+body.compact-sidebar .menu-item span {
+    display: none;
+}
+
+body.compact-sidebar .menu-item i {
+    width: auto;
+}

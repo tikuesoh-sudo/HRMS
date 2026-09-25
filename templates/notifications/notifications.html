@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Notifications - HRMS</title>
+
+
+    <!-- =====================================
+         BOOTSTRAP
+    ====================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================
+         BOOTSTRAP ICONS
+    ====================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    >
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+
+        .app-wrapper {
+            min-height: 100vh;
+            display: flex;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ====================================================== */
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background: #111827;
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            padding: 24px 16px;
+            z-index: 1000;
+        }
+
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px 28px;
+        }
+
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2563eb;
+            font-size: 21px;
+        }
+
+
+        .brand h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+
+        .brand span {
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+
+        .menu-title {
+            color: #6b7280;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 14px 12px 8px;
+        }
+
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 4px;
+            transition: .2s;
+            position: relative;
+        }
+
+
+        .menu-item:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+
+        .menu-item.active {
+            background: #2563eb;
+            color: white;
+        }
+
+
+        .menu-item i {
+            font-size: 18px;
+            width: 22px;
+        }
+
+
+        /* UNREAD SIDEBAR BADGE */
+
+        .notification-sidebar-badge {
+            margin-left: auto;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            border-radius: 50px;
+            background: #ef4444;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .logout {
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            bottom: 20px;
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+        ====================================================== */
+
+        .main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+        }
+
+
+        /* =====================================================
+           TOPBAR
+        ====================================================== */
+
+        .topbar {
+            height: 78px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+
+        .page-title h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+
+        .page-title p {
+            margin: 4px 0 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+
+        /* =====================================================
+           NOTIFICATION BELL
+        ====================================================== */
+
+        .notification-button {
+            border: none;
+            background: transparent;
+            position: relative;
+            font-size: 22px;
+            color: #374151;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+
+        .notification-button:hover {
+            color: #2563eb;
+        }
+
+
+        .notification-badge {
+            position: absolute;
+            top: -7px;
+            right: -9px;
+            background: #ef4444;
+            color: white;
+            min-width: 19px;
+            height: 19px;
+            padding: 0 5px;
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+
+        /* =====================================================
+           USER
+        ====================================================== */
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+
+        .user-info strong {
+            display: block;
+            font-size: 13px;
+        }
+
+
+        .user-info small {
+            color: #6b7280;
+        }
+
+
+        /* =====================================================
+           CONTENT
+        ====================================================== */
+
+        .content {
+            padding: 30px;
+        }
+
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+
+        .page-header h2 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+
+        .page-header p {
+            margin: 5px 0 0;
+            color: #6b7280;
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ====================================================== */
+
+        .btn-primary-custom {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 9px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 600;
+        }
+
+
+        .btn-primary-custom:hover {
+            background: #1d4ed8;
+            color: white;
+        }
+
+
+        /* =====================================================
+           NOTIFICATION CARD
+        ====================================================== */
+
+        .notification-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            padding: 18px;
+            transition: .2s;
+        }
+
+
+        .notification-card.unread {
+            border-left: 4px solid #2563eb;
+            background: #f8fbff;
+        }
+
+
+        .notification-card:hover {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .05);
+        }
+
+
+        .notification-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+
+        .notification-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+
+        .notification-content {
+            flex: 1;
+        }
+
+
+        .notification-content h5 {
+            margin: 0 0 5px;
+            font-size: 16px;
+        }
+
+
+        .notification-content p {
+            margin: 0 0 8px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+
+        .notification-meta {
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+
+        .notification-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            text-decoration: none;
+        }
+
+
+        .action-btn:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+
+        /* =====================================================
+           EMPTY STATE
+        ====================================================== */
+
+        .empty-state {
+            background: white;
+            border: 1px dashed #d1d5db;
+            border-radius: 14px;
+            text-align: center;
+            padding: 70px 20px;
+        }
+
+
+        .empty-state i {
+            font-size: 50px;
+            color: #9ca3af;
+        }
+
+
+        .empty-state h4 {
+            margin-top: 15px;
+        }
+
+
+        .empty-state p {
+            color: #6b7280;
+        }
+
+
+        /* =====================================================
+           TYPE BADGE
+        ====================================================== */
+
+        .type-badge {
+            display: inline-block;
+            padding: 4px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #eef2ff;
+            color: #4338ca;
+        }
+
+
+        .unread-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #2563eb;
+            margin-right: 5px;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .notification-row {
+                flex-wrap: wrap;
+            }
+
+            .notification-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+        }
+        /* Add these rules to every page CSS file so the saved
+    Settings dark mode applies across the entire HRMS system. */
+
+html[data-theme="dark"] body {
+    background: #0b1120 !important;
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .dashboard-card,
+html[data-theme="dark"] .employee-card,
+html[data-theme="dark"] .table-card,
+html[data-theme="dark"] .content-card,
+html[data-theme="dark"] .report-card,
+html[data-theme="dark"] .profile-card,
+html[data-theme="dark"] .payroll-card {
+    background: #111827 !important;
+    color: #e5e7eb !important;
+    border-color: #263244 !important;
+}
+
+html[data-theme="dark"] table {
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .table {
+    --bs-table-bg: #111827;
+    --bs-table-color: #e5e7eb;
+    --bs-table-border-color: #263244;
+}
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select,
+html[data-theme="dark"] textarea {
+    background: #0f172a !important;
+    color: #e5e7eb !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .modal-content {
+    background: #111827 !important;
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .dropdown-menu {
+    background: #111827 !important;
+    border-color: #263244 !important;
+}
+
+html[data-theme="dark"] .dropdown-item {
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .dropdown-item:hover {
+    background: #1e293b !important;
+}
+
+html[data-theme="dark"] .text-muted {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .border,
+html[data-theme="dark"] .border-bottom,
+html[data-theme="dark"] .border-top {
+    border-color: #263244 !important;
+}
+
+html[data-theme="dark"] .btn-light {
+    background: #1e293b !important;
+    color: #e5e7eb !important;
+    border-color: #334155 !important;
+}
+
+
+/* COMPACT SIDEBAR */
+
+body.compact-sidebar .main-content {
+    margin-left: 82px !important;
+}
+
+body.compact-sidebar .sidebar {
+    width: 82px !important;
+}
+
+body.compact-sidebar .sidebar-logo {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+body.compact-sidebar .sidebar-logo > div:last-child {
+    display: none;
+}
+
+body.compact-sidebar .menu-title {
+    display: none;
+}
+
+body.compact-sidebar .menu-item {
+    justify-content: center;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+body.compact-sidebar .menu-item span {
+    display: none;
+}
+
+body.compact-sidebar .menu-item i {
+    width: auto;
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="app-wrapper">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-icon">
+
+                <i class="bi bi-people-fill"></i>
+
+            </div>
+
+            <div>
+
+                <h4>HRMS</h4>
+
+                <span>
+                    Management System
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAIN MENU -->
+
+        <div class="menu-title">
+            MAIN MENU
+        </div>
+
+
+        <!-- DASHBOARD -->
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="menu-item"
+        >
+
+            <i class="bi bi-grid-1x2-fill"></i>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <!-- EMPLOYEES -->
+
+        <a
+            href="{{ url_for('employee_list') }}"
+            class="menu-item"
+        >
+
+            <i class="bi bi-people"></i>
+
+            <span>
+                Employees
+            </span>
+
+        </a>
+
+
+        <!-- LEAVE -->
+
+        <a
+            href="{{ url_for('leave_list') }}"
+            class="menu-item"
+        >
+
+            <i class="bi bi-calendar-check"></i>
+
+            <span>
+                Leave Management
+            </span>
+
+        </a>
+
+
+        <!-- PAYROLL -->
+
+        <a
+            href="{{ url_for('payroll') }}"
+            class="menu-item"
+        >
+
+            <i class="bi bi-wallet2"></i>
+
+            <span>
+                Payroll
+            </span>
+
+        </a>
+
+
+        <!-- REPORTS -->
+
+        <a
+            href="{{ url_for('reports') }}"
+            class="menu-item"
+        >
+
+            <i class="bi bi-bar-chart"></i>
+
+            <span>
+                Reports
+            </span>
+
+        </a>
+
+
+        <!-- SYSTEM -->
+
+        <div class="menu-title">
+            SYSTEM
+        </div>
+
+
+        <!-- PROFILE -->
+
+        <a
+            href="{{ url_for('profile') }}"
+            class="menu-item"
+        >
+
+            <i class="bi bi-person-circle"></i>
+
+            <span>
+                My Profile
+            </span>
+
+        </a>
+
+
+        <!-- SETTINGS -->
+
+        <a
+            href="{{ url_for('settings') }}"
+            class="menu-item"
+        >
+
+            <i class="bi bi-gear"></i>
+
+            <span>
+                Settings
+            </span>
+
+        </a>
+
+
+        <!-- NOTIFICATIONS -->
+
+        <a
+            href="{{ url_for('notifications') }}"
+            class="menu-item active"
+        >
+
+            <i class="bi bi-bell"></i>
+
+            <span>
+                Notifications
+            </span>
+
+
+            {% if unread_notifications > 0 %}
+
+                <span class="notification-sidebar-badge">
+
+                    {{ unread_notifications }}
+
+                </span>
+
+            {% endif %}
+
+        </a>
+
+
+        <!-- LOGOUT -->
+
+        <a
+            href="{{ url_for('logout') }}"
+            class="menu-item logout"
+        >
+
+            <i class="bi bi-box-arrow-left"></i>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+
+            <div class="page-title">
+
+                <h3>
+                    Notifications
+                </h3>
+
+                <p>
+                    Stay updated with your HRMS activity
+                </p>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+
+                <!-- NOTIFICATION BELL -->
+
+                <a
+                    href="{{ url_for('notifications') }}"
+                    class="notification-button"
+                    title="View Notifications"
+                    aria-label="View Notifications"
+                >
+
+                    <i class="bi bi-bell"></i>
+
+
+                    {% if unread_notifications > 0 %}
+
+                        <span class="notification-badge">
+
+                            {{ unread_notifications }}
+
+                        </span>
+
+                    {% endif %}
+
+                </a>
+
+
+                <!-- USER -->
+
+                <div class="user-profile">
+
+                    <div class="user-info">
+
+                        <strong>
+                            HR Administrator
+                        </strong>
+
+                        <small>
+                            HR Admin
+                        </small>
+
+                    </div>
+
+
+                    <div class="user-avatar">
+                        HA
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <section class="content">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="page-header">
+
+
+                <div>
+
+                    <h2>
+                        Notifications
+                    </h2>
+
+                    <p>
+
+                        You have
+
+                        <strong>
+                            {{ unread_notifications }}
+                        </strong>
+
+                        unread notification{% if unread_notifications != 1 %}s{% endif %}.
+
+                    </p>
+
+                </div>
+
+
+                <!-- CREATE NOTIFICATION -->
+
+                <a
+                    href="{{ url_for('create_notification') }}"
+                    class="btn-primary-custom"
+                >
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    New Notification
+
+                </a>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 NOTIFICATION LIST
+            ================================================== -->
+
+            {% if notifications %}
+
+
+                {% for notification in notifications %}
+
+
+                    <div
+                        class="notification-card {% if not notification.read %}unread{% endif %}"
+                    >
+
+
+                        <div class="notification-row">
+
+
+                            <!-- NOTIFICATION ICON -->
+
+                            <div class="notification-icon">
+
+
+                                {% if notification.type == "Leave" %}
+
+                                    <i class="bi bi-calendar-check"></i>
+
+
+                                {% elif notification.type == "Payroll" %}
+
+                                    <i class="bi bi-cash-stack"></i>
+
+
+                                {% elif notification.type == "Employee" %}
+
+                                    <i class="bi bi-person-plus"></i>
+
+
+                                {% elif notification.type == "Announcement" %}
+
+                                    <i class="bi bi-megaphone"></i>
+
+
+                                {% else %}
+
+                                    <i class="bi bi-info-circle"></i>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            <!-- CONTENT -->
+
+                            <div class="notification-content">
+
+
+                                <h5>
+
+
+                                    {% if not notification.read %}
+
+                                        <span class="unread-dot"></span>
+
+                                    {% endif %}
+
+
+                                    {{ notification.title }}
+
+
+                                </h5>
+
+
+                                <p>
+
+                                    {{ notification.message }}
+
+                                </p>
+
+
+                                <span class="type-badge">
+
+                                    {{ notification.type }}
+
+                                </span>
+
+
+                                <div class="notification-meta mt-2">
+
+                                    <i class="bi bi-clock"></i>
+
+                                    {{ notification.created_at }}
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <!-- ACTIONS -->
+
+                            <div class="notification-actions">
+
+
+                                {% if not notification.read %}
+
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('mark_notification_read', notification_id=notification.id) }}"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="action-btn"
+                                            title="Mark as read"
+                                        >
+
+                                            <i class="bi bi-check2"></i>
+
+                                        </button>
+
+                                    </form>
+
+
+                                {% endif %}
+
+
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('delete_notification', notification_id=notification.id) }}"
+                                    onsubmit="return confirm('Delete this notification?');"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="action-btn"
+                                        title="Delete"
+                                    >
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <!-- EMPTY STATE -->
+
+                <div class="empty-state">
+
+
+                    <i class="bi bi-bell-slash"></i>
+
+
+                    <h4>
+                        No notifications
+                    </h4>
+
+
+                    <p>
+                        There are currently no notifications to display.
+                    </p>
+
+
+                    <a
+                        href="{{ url_for('create_notification') }}"
+                        class="btn-primary-custom mt-3"
+                    >
+
+                        <i class="bi bi-plus-lg"></i>
+
+                        Create Notification
+
+                    </a>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+<script
+    src="{{ url_for('static', filename='js/settings.js') }}">
+</script>
+</body>
+
+</html>

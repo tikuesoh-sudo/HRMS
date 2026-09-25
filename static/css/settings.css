@@ -1,0 +1,1069 @@
+:root {
+    --primary: #2563eb;
+    --secondary: #4f46e5;
+    --dark: #0f172a;
+    --background: #f5f7fb;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --sidebar-width: 255px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--dark);
+    color: #ffffff;
+    z-index: 1000;
+    overflow-y: auto;
+    transition:
+        width 0.25s ease,
+        transform 0.25s ease;
+}
+
+.sidebar-logo {
+    height: 78px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    font-size: 20px;
+}
+
+.sidebar-logo h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.sidebar-logo span {
+    display: block;
+    color: #94a3b8;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.sidebar-menu {
+    padding: 22px 12px;
+}
+
+.menu-title {
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 12px 12px 8px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 12px 13px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.menu-item i {
+    font-size: 17px;
+    width: 20px;
+    text-align: center;
+}
+
+.menu-item:hover,
+.menu-item.active {
+    color: #ffffff;
+    background: rgba(37, 99, 235, 0.18);
+}
+
+.menu-item.active {
+    background: var(--primary);
+}
+
+.menu-item.logout {
+    margin-top: 20px;
+    color: #fca5a5;
+}
+
+.menu-item.logout:hover {
+    background: rgba(220, 38, 38, 0.15);
+}
+
+
+/* =========================================================
+   COMPACT SIDEBAR
+========================================================= */
+
+.sidebar.compact,
+body.compact-sidebar .sidebar {
+    width: 82px;
+}
+
+.sidebar.compact .sidebar-logo,
+body.compact-sidebar .sidebar .sidebar-logo {
+    justify-content: center;
+    padding: 0;
+}
+
+.sidebar.compact .sidebar-logo > div:last-child,
+body.compact-sidebar .sidebar .sidebar-logo > div:last-child {
+    display: none;
+}
+
+.sidebar.compact .menu-title,
+body.compact-sidebar .sidebar .menu-title {
+    display: none;
+}
+
+.sidebar.compact .menu-item,
+body.compact-sidebar .sidebar .menu-item {
+    justify-content: center;
+    padding: 13px 8px;
+}
+
+.sidebar.compact .menu-item span,
+body.compact-sidebar .sidebar .menu-item span {
+    display: none;
+}
+
+.sidebar.compact .menu-item i,
+body.compact-sidebar .sidebar .menu-item i {
+    width: auto;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.main-content {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    transition:
+        margin-left 0.25s ease;
+}
+
+body.compact-sidebar .main-content {
+    margin-left: 82px;
+}
+
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar {
+    height: 78px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    gap: 18px;
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.sidebar-toggle {
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 24px;
+    padding: 5px;
+}
+
+.page-title {
+    flex: 1;
+}
+
+.page-title h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.page-title p {
+    margin: 3px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.notification-btn {
+    position: relative;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 20px;
+}
+
+.notification-btn span {
+    position: absolute;
+    top: -5px;
+    right: -7px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: 20px;
+    background: var(--danger);
+    color: #ffffff;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.user-info strong {
+    display: block;
+    font-size: 13px;
+}
+
+.user-info small {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.settings-container {
+    padding: 28px 30px 40px;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 25px;
+}
+
+.page-header h2 {
+    margin: 0;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.page-header p {
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   ALERT
+========================================================= */
+
+.alert {
+    border: 0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.settings-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.03);
+}
+
+.card-header-custom {
+    min-height: 76px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-header-custom h5 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.card-header-custom p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.card-header-custom > i {
+    color: var(--primary);
+    font-size: 20px;
+}
+
+.settings-body {
+    padding: 22px;
+}
+
+
+/* =========================================================
+   FORMS
+========================================================= */
+
+.form-label {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.form-control,
+.form-select,
+.input-group-text {
+    min-height: 42px;
+    border-color: var(--border);
+    background: var(--card);
+    color: var(--text);
+    font-size: 13px;
+}
+
+.input-group-text {
+    color: var(--muted);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* =========================================================
+   SETTING ROWS
+========================================================= */
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 17px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.setting-row:first-child {
+    padding-top: 0;
+}
+
+.setting-row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.setting-info {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.setting-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.setting-icon.security {
+    background: #f0fdf4;
+    color: var(--success);
+}
+
+.setting-info strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.setting-info span {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-switch .form-check-input {
+    width: 40px;
+    height: 21px;
+}
+
+.form-switch .form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+.security-password {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.security-password strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.security-password span {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.security-password .btn {
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   PREFERENCES
+========================================================= */
+
+.preference-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.preference-item:first-child {
+    padding-top: 0;
+}
+
+.preference-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.preference-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #eef2ff;
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preference-item strong {
+    display: block;
+    font-size: 13px;
+}
+
+.preference-item span {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   SYSTEM INFORMATION
+========================================================= */
+
+.system-list {
+    padding: 8px 22px 15px;
+}
+
+.system-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+}
+
+.system-item:last-child {
+    border-bottom: 0;
+}
+
+.system-item span {
+    color: var(--muted);
+}
+
+.system-item strong {
+    text-align: right;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    display: inline-block;
+    border-radius: 50%;
+    background: var(--success);
+    margin-right: 5px;
+}
+
+
+/* =========================================================
+   QUICK TIP
+========================================================= */
+
+.settings-tip {
+    display: flex;
+    gap: 13px;
+    padding: 18px;
+    border-radius: 14px;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+}
+
+.tip-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #dbeafe;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.settings-tip strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.settings-tip p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.settings-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.settings-actions .btn {
+    min-width: 110px;
+    min-height: 42px;
+    font-size: 13px;
+}
+
+.settings-footer {
+    margin-top: 25px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   PASSWORD MODAL
+========================================================= */
+
+.password-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(15, 23, 42, 0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.password-modal.show {
+    display: flex;
+}
+
+.password-modal-content {
+    width: 100%;
+    max-width: 500px;
+    background: var(--card);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.password-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 22px;
+    border-bottom: 1px solid var(--border);
+}
+
+.password-modal-header h4 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.password-modal-header p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.modal-close {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.password-modal-body {
+    padding: 22px;
+}
+
+.password-modal-body small {
+    display: block;
+    color: var(--muted);
+    margin-top: 5px;
+    font-size: 10px;
+}
+
+.password-modal-footer {
+    padding: 16px 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+html[data-theme="dark"] {
+    --background: #0b1120;
+    --card: #111827;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --border: #263244;
+}
+
+html[data-theme="dark"] body {
+    background: #0b1120;
+    color: #e5e7eb;
+}
+
+html[data-theme="dark"] .topbar {
+    background: #111827;
+    border-color: #263244;
+}
+
+html[data-theme="dark"] .settings-card {
+    background: #111827;
+    border-color: #263244;
+    box-shadow: none;
+}
+
+html[data-theme="dark"] .card-header-custom {
+    border-color: #263244;
+}
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select,
+html[data-theme="dark"] .input-group-text {
+    background: #0f172a;
+    color: #e5e7eb;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .form-control::placeholder {
+    color: #64748b;
+}
+
+html[data-theme="dark"] .setting-row,
+html[data-theme="dark"] .security-password,
+html[data-theme="dark"] .preference-item,
+html[data-theme="dark"] .system-item,
+html[data-theme="dark"] .settings-footer {
+    border-color: #263244;
+}
+
+html[data-theme="dark"] .settings-tip {
+    background: #172554;
+    border-color: #1e3a8a;
+}
+
+html[data-theme="dark"] .tip-icon {
+    background: #1e3a8a;
+}
+
+html[data-theme="dark"] .setting-icon {
+    background: #172554;
+}
+
+html[data-theme="dark"] .setting-icon.security {
+    background: #052e16;
+}
+
+html[data-theme="dark"] .preference-icon {
+    background: #1e1b4b;
+}
+
+html[data-theme="dark"] .btn-light {
+    background: #1e293b;
+    border-color: #334155;
+    color: #e5e7eb;
+}
+
+html[data-theme="dark"] .btn-light:hover {
+    background: #334155;
+}
+
+html[data-theme="dark"] .alert {
+    border-color: #263244;
+}
+
+html[data-theme="dark"] .password-modal {
+    background: rgba(0, 0, 0, 0.78);
+}
+
+html[data-theme="dark"] .password-modal-content {
+    background: #111827;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 991px) {
+
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .main-content,
+    body.compact-sidebar .main-content {
+        margin-left: 0;
+    }
+
+    .topbar {
+        padding: 0 20px;
+    }
+
+    .settings-container {
+        padding: 22px 20px 35px;
+    }
+
+}
+
+@media (max-width: 767px) {
+
+    .topbar {
+        height: 70px;
+    }
+
+    .page-title p {
+        display: none;
+    }
+
+    .topbar-right {
+        gap: 10px;
+    }
+
+    .user-info > div:last-child {
+        display: none;
+    }
+
+    .settings-container {
+        padding: 20px 15px 30px;
+    }
+
+    .settings-body {
+        padding: 18px;
+    }
+
+    .security-password {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .page-header h2 {
+        font-size: 21px;
+    }
+
+    .card-header-custom {
+        padding: 16px;
+    }
+
+    .settings-body {
+        padding: 16px;
+    }
+
+    .setting-row {
+        gap: 10px;
+    }
+
+    .setting-info span {
+        max-width: 180px;
+    }
+
+    .settings-actions {
+        justify-content: stretch;
+    }
+
+    .settings-actions .btn {
+        flex: 1;
+    }
+
+    .password-modal-footer {
+        flex-direction: column-reverse;
+    }
+
+    .password-modal-footer .btn {
+        width: 100%;
+    }
+
+}
+/* Add these rules to every page CSS file so the saved
+    Settings dark mode applies across the entire HRMS system. */
+
+html[data-theme="dark"] body {
+    background: #0b1120 !important;
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .dashboard-card,
+html[data-theme="dark"] .employee-card,
+html[data-theme="dark"] .table-card,
+html[data-theme="dark"] .content-card,
+html[data-theme="dark"] .report-card,
+html[data-theme="dark"] .profile-card,
+html[data-theme="dark"] .payroll-card {
+    background: #111827 !important;
+    color: #e5e7eb !important;
+    border-color: #263244 !important;
+}
+
+html[data-theme="dark"] table {
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .table {
+    --bs-table-bg: #111827;
+    --bs-table-color: #e5e7eb;
+    --bs-table-border-color: #263244;
+}
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select,
+html[data-theme="dark"] textarea {
+    background: #0f172a !important;
+    color: #e5e7eb !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .modal-content {
+    background: #111827 !important;
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .dropdown-menu {
+    background: #111827 !important;
+    border-color: #263244 !important;
+}
+
+html[data-theme="dark"] .dropdown-item {
+    color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .dropdown-item:hover {
+    background: #1e293b !important;
+}
+
+html[data-theme="dark"] .text-muted {
+    color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .border,
+html[data-theme="dark"] .border-bottom,
+html[data-theme="dark"] .border-top {
+    border-color: #263244 !important;
+}
+
+html[data-theme="dark"] .btn-light {
+    background: #1e293b !important;
+    color: #e5e7eb !important;
+    border-color: #334155 !important;
+}
+
+
+/* COMPACT SIDEBAR */
+
+body.compact-sidebar .main-content {
+    margin-left: 82px !important;
+}
+
+body.compact-sidebar .sidebar {
+    width: 82px !important;
+}
+
+body.compact-sidebar .sidebar-logo {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+body.compact-sidebar .sidebar-logo > div:last-child {
+    display: none;
+}
+
+body.compact-sidebar .menu-title {
+    display: none;
+}
+
+body.compact-sidebar .menu-item {
+    justify-content: center;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+body.compact-sidebar .menu-item span {
+    display: none;
+}
+
+body.compact-sidebar .menu-item i {
+    width: auto;
+}
